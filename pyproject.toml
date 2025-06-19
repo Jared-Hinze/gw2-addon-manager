@@ -9,4 +9,5 @@ readme = "README.md"
 dependencies = [
     "requests>=2.32.4",
     "ruamel-yaml>=0.18.14",
+    "types-requests>=2.32.4.20250611",
 ]
