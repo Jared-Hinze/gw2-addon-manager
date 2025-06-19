@@ -1,0 +1,37 @@
+- !RawAddon
+  dll: d3d11.dll
+  url: https://www.deltaconnected.com/arcdps/x64/d3d11.dll
+- !RawAddon
+  dll: d3d9_arcdps_buildpad.dll
+  url: https://buildpad.gw2archive.eu/versions/latest
+  dst: bin64
+- !GitAddon
+  dll: arcdps_bhud.dll
+  owner: blish-hud
+  repo: arcdps-bhud
+  dst: bin64
+- !GitAddon
+  dll: arcdps_clears.dll
+  owner: gw2scratch
+  repo: arcdps-clears
+  dst: bin64
+- !GitAddon
+  dll: arcdps_food_reminder.dll
+  owner: zerthox
+  repo: arcdps-food-reminder
+  dst: bin64
+- !GitAddon
+  dll: arcdps_healing_stats.dll
+  owner: Krappa322
+  repo: arcdps_healing_stats
+  dst: bin64
+- !GitAddon
+  dll: d3d9_arcdps_mechanics.dll
+  owner: knoxfighter
+  repo: GW2-ArcDPS-Mechanics-Log
+  dst: bin64
+- !GitAddon
+  dll: d3d9_arcdps_table.dll
+  owner: knoxfighter
+  repo: GW2-ArcDPS-Boon-Table
+  dst: bin64

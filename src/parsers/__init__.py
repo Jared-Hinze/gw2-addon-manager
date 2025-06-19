@@ -36,3 +36,6 @@ def load_yaml(file) -> dict | None:
 # ==============================================================================
 from . import settings
 Settings = settings.load()
+
+from . import addons
+addons = addons.load()
