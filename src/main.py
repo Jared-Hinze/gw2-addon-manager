@@ -3,6 +3,11 @@
 # Built-in Libraries
 import logging
 
+# Third Party Libraries
+# N/A
+
+# Need to initialize logging and path constants before importing local libraries
+# so dependencies that use logging can be configured by this call
 import config
 config.initialize()
 
@@ -15,7 +20,6 @@ from parsers import addons
 #	allow users to select which addons they want to install/uninstall
 
 # separate gui controls
-# separate api controls
 
 # ==============================================================================
 def main():
