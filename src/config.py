@@ -42,6 +42,12 @@ LOGGING_CONFIG = _CONFIGS_DIR / "logging.yaml"
 LOGS_DIR = _BASEDIR / "logs"
 
 # ==============================================================================
+# Helpers
+# ==============================================================================
+def relpath(p: Path) -> Path:
+	return p.relative_to(_BASEDIR)
+
+# ==============================================================================
 # Configure (and fix) Logging
 # ==============================================================================
 def initialize():
@@ -50,7 +56,7 @@ def initialize():
 		return
 
 	# --------------------------------------------------------------------------
-	def _fix_paths(data):
+	def _fix_paths(data: dict) -> dict:
 		if not data:
 			return {}
 
