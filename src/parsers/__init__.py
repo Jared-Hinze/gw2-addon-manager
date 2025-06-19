@@ -30,3 +30,9 @@ def load_yaml(file) -> dict | None:
 		logger.exception(e)
 
 	return data
+
+# ==============================================================================
+# Pre-loaders
+# ==============================================================================
+from . import settings
+Settings = settings.load()
