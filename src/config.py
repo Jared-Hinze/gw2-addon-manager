@@ -56,7 +56,7 @@ def initialize():
 		return
 
 	# --------------------------------------------------------------------------
-	def _fix_paths(data):
+	def _fix_paths(data: dict) -> dict:
 		if not data:
 			return {}
 
