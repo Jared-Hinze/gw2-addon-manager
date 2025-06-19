@@ -14,6 +14,7 @@ import logging
 # N/A
 
 # Local Libraries
+import api
 from config import ADDONS_CONFIG, yaml
 from parsers import Settings, load_yaml
 
@@ -46,6 +47,26 @@ class Addon(CoreAddon):
 	def __repr__(self):
 		attrs = ", ".join(f"{k}={v!r}" for k, v in vars(self).items())
 		return f"{type(self).__name__}({attrs})"
+
+	# --------------------------------------------------------------------------
+	@property
+	def installed(self):
+		return self.dst.exists()
+
+	# --------------------------------------------------------------------------
+	def install(self):
+		if self.yaml_tag == "!RawAddon":
+			svc = api.DirectRequest(self.url, self.dll, self.dst)
+		else:
+			svc = api.GitRequest(self.url, self.dll, self.dst)
+		svc.download()
+		self.removed = False
+
+	# --------------------------------------------------------------------------
+	def uninstall(self):
+		if self.installed:
+			self.dst.unlink()
+			self.removed = True
 
 # ==============================================================================
 @yaml.register_class
