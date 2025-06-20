@@ -6,15 +6,12 @@ root:
 loggers:
   api:
     level: NOTSET
-    handlers: [file]
     propagate: no
   gui:
     level: NOTSET
-    handlers: [file]
     propagate: no
   parser:
     level: NOTSET
-    handlers: [file]
     propagate: no
 handlers:
   file:

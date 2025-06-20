@@ -11,19 +11,19 @@ import logging
 import config
 config.initialize()
 
+# Local Libraries
+import gui
 from parsers import addons
-
-# a rough spitball of what I'm thinking about and what I'll need...
-# GOAL:
-# 	create a simple UI to install and uninstall gw2 addons from various sources
-#	configurations of this app should be handled via YAML when possible
-#	allow users to select which addons they want to install/uninstall
-
-# separate gui controls
 
 # ==============================================================================
 def main():
-	pass
+	logging.info("Creating GUI")
+
+	gui.create_ui(addons)
+	gui.show()
+
+	logging.info("Closing GUI")
+	logging.info('-' * 100)
 
 # ==============================================================================
 if __name__ == "__main__":
