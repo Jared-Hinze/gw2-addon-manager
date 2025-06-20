@@ -2,7 +2,6 @@
 # ==============================================================================
 # Built-in Libraries
 import logging
-import json
 import re
 from pathlib import Path
 
@@ -23,6 +22,10 @@ logger = logging.getLogger(__name__)
 # ==============================================================================
 class Settings(dict):
 	# --------------------------------------------------------------------------
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+	# --------------------------------------------------------------------------
 	def __repr__(self):
 		attrs = ", ".join(f"{k}={v!r}" for k, v in self.items())
 		return f"{type(self).__name__}({attrs})"
@@ -40,6 +43,20 @@ def ensure_key(settings, key):
 		logger.critical(f"See: {fqn(key)}")
 		return False
 	return True
+
+# ------------------------------------------------------------------------------
+def ensure_bool(settings, key):
+	if not ensure_key(settings, key):
+		return
+
+	value = str(settings[key]).lower()
+	if not re.match(r"true|false|yes|no|on|off|[tfyn]", value):
+		settings[key] = None
+		logger.error(f"Invalid Value: {value}.")
+		logger.error(f"See {fqn(key)}.")
+		return
+
+	settings[key] = value in ('t', 'y', "true", "yes", "on")
 
 # ------------------------------------------------------------------------------
 def ensure_path(settings, key):
@@ -68,5 +85,6 @@ def load():
 
 	settings = Settings(load_yaml(SETTINGS_CONFIG))
 	ensure_path(settings, "install_path")
+	ensure_bool(settings, "close_on_success")
 
 	return settings

@@ -12,3 +12,16 @@ dependencies = [
     "ttkwidgets>=0.13.0",
     "types-requests>=2.32.4.20250611",
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = true
+show_error_codes = true
+disable_error_code = [
+	"attr-defined",
+	"assignment",
+	"index",
+	"misc",
+	"union-attr",
+	"var-annotated",
+]
