@@ -1,11 +1,15 @@
-# Byte-compiled / optimized / DLL files
+# Environments
+.venv
+
+# PyInstaller
+packaging/
+dist/
+
+# Python
 __pycache__/
+*.egg-info/
 *.py[cod]
 *$py.class
-
-# Environments
-.env
-.venv
 
 # Logging
 *.log
