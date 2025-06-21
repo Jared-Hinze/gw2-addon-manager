@@ -1,7 +1,7 @@
 [project]
 name = "gw2-addon-manager"
-version = "0.0.5"
 description = "A simple tool to manage addons for Guild Wars 2."
+dynamic = ["version"]
 
 requires-python = ">=3.11"
 
@@ -10,6 +10,22 @@ dependencies = [
     "requests>=2.32.4",
     "ruamel-yaml>=0.18.14",
     "ttkwidgets>=0.13.0",
+]
+
+authors = [
+	{name = "Jared Hinze", email = "Jared.L.Hinze@gmail.com"}
+]
+maintainers = [
+	{name = "Jared Hinze", email = "Jared.L.Hinze@gmail.com"}
+]
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE"]
+
+keywords = ["guild wars 2", "gw2"]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.14.1",
     "types-requests>=2.32.4.20250611",
 ]
 
