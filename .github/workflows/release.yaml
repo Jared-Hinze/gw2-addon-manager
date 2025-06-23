@@ -2,6 +2,12 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      create_tag:
+        description: Generate a new tag for Release
+        type: boolean
+        default: true
+
   pull_request:
     branches: [ main ]
     types:
@@ -48,3 +54,25 @@ jobs:
         with:
           name: ${{ github.sha }}
           path: dist/*
+
+  generate_tag:
+    name: Create next Semantic Versioning tag
+
+    if: ${{ success() }}
+    needs: [ build_exe ]
+    runs-on: windows-latest
+
+    outputs:
+      tag: ${{ steps.tagger.outputs.new_tag }}
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: AutoTagger
+        id: tagger
+        uses: anothrNic/github-tag-action@1.73.0
+        with:
+          INITIAL_VERSION: "1.0.0"
+          TAG_PREFIX: v
+          DRY_RUN: ${{ !inputs.create_tag || true }} # for now
