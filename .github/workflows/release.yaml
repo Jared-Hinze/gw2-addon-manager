@@ -60,7 +60,7 @@ jobs:
 
     if: ${{ success() }}
     needs: [ build_exe ]
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     outputs:
       tag: ${{ steps.tagger.outputs.new_tag }}
