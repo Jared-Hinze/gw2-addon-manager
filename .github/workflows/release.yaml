@@ -22,7 +22,8 @@ jobs:
       artifact_url: ${{ steps.upload_artifact.outputs.artifact-url }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
