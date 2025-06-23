@@ -21,7 +21,7 @@ jobs:
     name: Build EXE with PyInstaller
 
     # if: github.event.pull_request.merged == true
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     outputs:
       artifact_id: ${{ steps.upload_artifact.outputs.artifact-id }}
@@ -54,25 +54,3 @@ jobs:
         with:
           name: ${{ github.sha }}
           path: dist/*
-
-  generate_tag:
-    name: Create next Semantic Versioning tag
-
-    if: ${{ success() }}
-    needs: [ build_exe ]
-    runs-on: ubuntu-latest
-
-    outputs:
-      tag: ${{ steps.tagger.outputs.new_tag }}
-
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    steps:
-      - name: AutoTagger
-        id: tagger
-        uses: anothrNick/github-tag-action@1.73.0
-        with:
-          INITIAL_VERSION: "1.0.0"
-          TAG_PREFIX: v
-          DRY_RUN: ${{ !inputs.create_tag || true }} # for now
