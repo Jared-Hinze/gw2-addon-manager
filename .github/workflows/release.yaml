@@ -16,6 +16,11 @@ jobs:
 
     if: github.event.pull_request.merged == true
     runs-on: windows-latest
+
+    outputs:
+      artifact_id: ${{ steps.upload_artifact.outputs.artifact-id }}
+      artifact_url: ${{ steps.upload_artifact.outputs.artifact-url }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -36,6 +41,9 @@ jobs:
         run: |
           uv run pyinstaller packaging.spec
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Artifacts
+        id: upload_artifact
+        uses: actions/upload-artifact@v4
         with:
+          name: ${{ github.sha }}
           path: dist/*
