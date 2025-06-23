@@ -11,7 +11,9 @@ permissions:
   contents: read
 
 jobs:
-  if_merged:
+  build_exe:
+    name: Build EXE with PyInstaller
+
     if: github.event.pull_request.merged == true
     runs-on: windows-latest
     steps:
