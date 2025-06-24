@@ -51,7 +51,7 @@ jobs:
         id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.ref }}
+          name: ${{ github.sha }}
           path: dist/*
 
   generate_tag:
@@ -99,3 +99,4 @@ jobs:
         id: tagN
         if: ${{ steps.check_tag.outputs.exists == 'true' }}
         uses: anothrNick/github-tag-action@1.73.0
+
