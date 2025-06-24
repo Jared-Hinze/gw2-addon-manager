@@ -57,14 +57,13 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: $ARTIFACT_NAME
+          name: ${{ env.ARTIFACT_NAME }}
           path: dist/*
 
   generate_tag:
     name: Create next Release tag
 
     if: ${{ success() }}
-    needs: [ build_exe ]
     runs-on: ubuntu-latest
 
     outputs:
@@ -110,7 +109,7 @@ jobs:
     name: Create Release with Artifacts
 
     if: ${{ success() }}
-    needs: [ build_exe, generate_tag ]
+    needs: [ generate_tag ]
     runs-on: ubuntu-latest
 
     permissions:
@@ -121,16 +120,10 @@ jobs:
         id: download_artifacts
         uses: actions/download-artifact@v4
         with:
-          name: $ARTIFACT_NAME
-
-      - name: Check 1
-        run: ls -hAlt
+          name: ${{ env.ARTIFACT_NAME }}
 
       - name: Zip Artifacts
         run: zip -r "$RELEASE_ARTIFACT" .
-
-      - name: Check 2
-        run: ls -hAlt
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -140,8 +133,22 @@ jobs:
           make_latest: true
           name: ${{ needs.generate_tag.outputs.tag }}
           tag_name: ${{ needs.generate_tag.outputs.tag }}
+          # FIXME
           body: |
             Test this.
             Move to `body_path` soon.
           generate_release_notes: true
           files: "${{ env.RELEASE_ARTIFACT }}"
+
+  clean_up:
+    name: Delete Artifacts
+
+    if: ${{ success() }}
+    needs: [ build_exe ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          failOnError: false
