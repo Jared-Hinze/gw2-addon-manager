@@ -69,8 +69,8 @@ wheels = [
 
 [[package]]
 name = "gw2-addon-manager"
-version = "0.0.0"
-source = { virtual = "." }
+version = "1.1.0.post9+git.06dabddd.dirty"
+source = { editable = "." }
 dependencies = [
     { name = "requests" },
     { name = "ruamel-yaml" },

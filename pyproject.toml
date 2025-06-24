@@ -1,3 +1,7 @@
+[build-system]
+requires = [ "setuptools>=41", "wheel", "setuptools-git-versioning>=2.0,<3", ]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "gw2-addon-manager"
 description = "A simple tool to manage addons for Guild Wars 2."
@@ -41,3 +45,6 @@ disable_error_code = [
 	"union-attr",
 	"var-annotated",
 ]
+
+[tool.setuptools-git-versioning]
+enabled = true
