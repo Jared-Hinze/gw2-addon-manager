@@ -20,8 +20,6 @@ jobs:
   generate_tag:
     name: Create next Release tag
 
-    if: ${{ success() }}
-    needs: [ build_exe ]
     runs-on: ubuntu-latest
 
     outputs:
