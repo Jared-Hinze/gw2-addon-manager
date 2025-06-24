@@ -17,44 +17,6 @@ permissions:
   contents: read
 
 jobs:
-  # build_exe:
-  #   name: Build EXE with PyInstaller
-
-  #   # if: github.event.pull_request.merged == true
-  #   runs-on: windows-latest
-
-  #   outputs:
-  #     artifact_id: ${{ steps.upload_artifact.outputs.artifact-id }}
-  #     artifact_url: ${{ steps.upload_artifact.outputs.artifact-url }}
-
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Set up Python 3.13
-  #       uses: actions/setup-python@v5
-  #       with:
-  #         python-version: "3.13"
-
-  #     - name: Install dependencies
-  #       run: |
-  #         python -m ensurepip --default-pip
-  #         python -m pip install --upgrade pip
-  #         python -m pip install pipx
-  #         pipx install uv
-  #         uv sync
-
-  #     - name: Run PyInstaller
-  #       run: |
-  #         uv run pyinstaller packaging.spec
-
-  #     - name: Upload Artifacts
-  #       id: upload_artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ${{ github.sha }}
-  #         path: dist/*
-
   generate_tag:
     name: Create next Release tag
 
