@@ -49,6 +49,14 @@ jobs:
         with:
           tag: "${{ steps.tagger.outputs.old_tag }}"
 
+      - name: Inspect outputs
+        run: |
+          echo "new_tag=${{ steps.tagger.outputs.new_tag }}"
+          echo "old_tag=${{ steps.tagger.outputs.old_tag }}"
+          echo "tag=${{ steps.tagger.outputs.tag }}"
+          echo "part=${{ steps.tagger.outputs.part }}"
+          echo "exists=${{ steps.check_tag.outputs.exists }}"
+
       - name: Create first tag
         id: first_tag
         if: ${{ !steps.check_tag.outputs.exists }}
