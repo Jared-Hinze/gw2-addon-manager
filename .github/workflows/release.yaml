@@ -140,7 +140,7 @@ jobs:
           prerelease: ${{ inputs.is_prerelease || true }} # for now
 
       - name: Upload Release Artifacts
-        uses: actions/upload-release-asset
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
