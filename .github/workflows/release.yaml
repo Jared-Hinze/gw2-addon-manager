@@ -64,6 +64,7 @@ jobs:
     name: Create next Release tag
 
     if: ${{ success() }}
+    needs: [ build_exe ]
     runs-on: ubuntu-latest
 
     outputs:
@@ -144,7 +145,7 @@ jobs:
     name: Delete Artifacts
 
     if: ${{ success() }}
-    needs: [ build_exe ]
+    needs: [ build_exe, create_release ]
     runs-on: ubuntu-latest
 
     steps:
