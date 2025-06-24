@@ -69,7 +69,7 @@ wheels = [
 
 [[package]]
 name = "gw2-addon-manager"
-version = "1.1.0.post9+git.06dabddd.dirty"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "requests" },
