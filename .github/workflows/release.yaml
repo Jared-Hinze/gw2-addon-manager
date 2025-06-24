@@ -56,6 +56,8 @@ jobs:
 
       - name: Sign EXE
         uses: sigstore/gh-action-sigstore-python@v3.0.1 # FIXME
+        permissions:
+          id-token: write
         with:
           inputs: dist/${{ github.event.repository.name }}.exe
           upload-signing-artifacts: true
