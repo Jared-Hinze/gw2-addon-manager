@@ -81,4 +81,3 @@ jobs:
         env:
           INITIAL_VERSION: "1.0.0"
           TAG_PREFIX: v
-          DRY_RUN: ${{ !inputs.create_tag || true }} # for now
