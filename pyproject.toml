@@ -28,9 +28,15 @@ license-files = ["LICENSE"]
 keywords = ["guild wars 2", "gw2"]
 
 [dependency-groups]
-dev = [
+build-exe = [
     "pyinstaller>=6.14.1",
+]
+type-hints = [
     "types-requests>=2.32.4.20250611",
+]
+dev = [
+	{include-group = "build-exe"},
+	{include-group = "type-hints"},
 ]
 
 [tool.mypy]

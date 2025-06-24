@@ -78,8 +78,14 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+build-exe = [
+    { name = "pyinstaller" },
+]
 dev = [
     { name = "pyinstaller" },
+    { name = "types-requests" },
+]
+type-hints = [
     { name = "types-requests" },
 ]
 
@@ -91,10 +97,12 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
+build-exe = [{ name = "pyinstaller", specifier = ">=6.14.1" }]
 dev = [
     { name = "pyinstaller", specifier = ">=6.14.1" },
     { name = "types-requests", specifier = ">=2.32.4.20250611" },
 ]
+type-hints = [{ name = "types-requests", specifier = ">=2.32.4.20250611" }]
 
 [[package]]
 name = "idna"
