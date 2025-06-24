@@ -59,14 +59,14 @@ jobs:
 
       - name: Create first tag
         id: first_tag
-        if: steps.check_tag.outputs.exists == false
+        if: ${{ steps.check_tag.outputs.exists == "false" }}
         uses: anothrNick/github-tag-action@1.73.0
         env:
           CUSTOM_TAG: "v1.0.0"
 
       - name: Create next tag
         id: next_tag
-        if: steps.check_tag.outputs.exists == true
+        if: ${{ steps.check_tag.outputs.exists == "true" }}
         uses: anothrNick/github-tag-action@1.73.0
         env:
           TAG_PREFIX: v
