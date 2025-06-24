@@ -23,15 +23,17 @@ on:
 permissions:
   contents: read
 
+env:
+  ARTIFACT_NAME: "${{ github.sha }}"
+  REPO_NAME: "${{ github.event.repository.name }}"
+  RELEASE_ARTIFACT: "$REPO_NAME.zip"
+
 jobs:
   build_exe:
     name: Build EXE with PyInstaller
 
     # if: github.event.pull_request.merged == true
     runs-on: windows-latest
-
-    outputs:
-      artifact_id: ${{ steps.upload_artifact.outputs.artifact-id }}
 
     steps:
       - name: Checkout Repository
@@ -58,7 +60,7 @@ jobs:
         id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.sha }}
+          name: $ARTIFACT_NAME
           path: dist/*
 
   generate_tag:
@@ -118,32 +120,25 @@ jobs:
       contents: write
 
     steps:
-      - name: Download Artifacts
+      - name: Download Artifact
         id: download_artifacts
         uses: actions/download-artifact@v4
         with:
-          artifact-ids: "${{ needs.build_exe.outputs.artifact_id }}"
+          name: "$ARTIFACT_NAME"
+
+      - name: Rename Artifact
+        run: mv "$ARTIFACT_NAME" "$RELEASE_ARTIFACT"
 
       - name: Create Release
-        uses: actions/create-release@v1
-        id: release
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: softprops/action-gh-release@v2
         with:
+          draft: ${{ inputs.is_draft || true }} # FIXME
+          prerelease: ${{ inputs.is_prerelease || true }} # FIXME
+          make_latest: true
+          name: ${{ needs.generate_tag.outputs.tag }}
           tag_name: ${{ needs.generate_tag.outputs.tag }}
-          release_name: ${{ needs.generate_tag.outputs.tag }}
           body: |
-            Testing body.
-            Will need to move to `body_path` soon.
-          draft: ${{ inputs.is_draft || true }} # for now
-          prerelease: ${{ inputs.is_prerelease || true }} # for now
-
-      - name: Upload Release Artifacts
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: ${{ steps.download_artifacts.outputs.download-path }}
-          asset_name: ${{ github.event.repository.name }}
-          asset_content_type: application/zip
+            Test this.
+            Move to `body_path` soon.
+          generate_release_notes: true
+          files: "$RELEASE_ARTIFACT"
