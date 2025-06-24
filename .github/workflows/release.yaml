@@ -39,7 +39,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.13
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -53,11 +53,9 @@ jobs:
           uv sync
 
       - name: Run PyInstaller
-        run: |
-          uv run pyinstaller packaging.spec
+        run: uv run pyinstaller packaging.spec
 
       - name: Upload Artifacts
-        id: upload_artifact
         uses: actions/upload-artifact@v4
         with:
           name: $ARTIFACT_NAME
@@ -120,17 +118,20 @@ jobs:
       contents: write
 
     steps:
-      - name: Download Artifact
+      - name: Download Artifacts
         id: download_artifacts
         uses: actions/download-artifact@v4
         with:
           name: "$ARTIFACT_NAME"
 
-      - name: Check
+      - name: Check 1
         run: ls -hAlt
 
-      - name: Rename Artifact
-        run: mv "$ARTIFACT_NAME" "$RELEASE_ARTIFACT"
+      - name: Zip Artifacts
+        run: zip -r "$RELEASE_ARTIFACT" .
+
+      - name: Check 2
+        run: ls -hAlt
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
