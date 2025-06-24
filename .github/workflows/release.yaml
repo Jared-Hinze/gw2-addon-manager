@@ -126,6 +126,9 @@ jobs:
         with:
           name: "$ARTIFACT_NAME"
 
+      - name: Check
+        run: ls -hAlt
+
       - name: Rename Artifact
         run: mv "$ARTIFACT_NAME" "$RELEASE_ARTIFACT"
 
