@@ -36,10 +36,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.13"
 
@@ -54,102 +54,91 @@ jobs:
       - name: Run PyInstaller
         run: uv run pyinstaller packaging.spec
 
+      - name: Sign EXE
+        uses: sigstore/gh-action-sigstore-python@v3.0.1 # FIXME
+        with:
+          inputs: dist/*
+
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: dist/*
 
-  generate_tag:
-    name: Create next Release tag
+  # generate_tag:
+  #   name: Create next Release tag
 
-    if: ${{ success() }}
-    needs: [ build_exe ]
-    runs-on: ubuntu-latest
+  #   if: ${{ success() }}
+  #   needs: [ build_exe ]
+  #   runs-on: ubuntu-latest
 
-    outputs:
-      tag: ${{ steps.tagN.outputs.new_tag || steps.tag1.outputs.new_tag }}
+  #   outputs:
+  #     tag: ${{ steps.tagN.outputs.new_tag || steps.tag1.outputs.new_tag }}
 
-    permissions:
-      contents: write
+  #   permissions:
+  #     contents: write
 
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      INITIAL_VERSION: "1.0.0"
-      TAG_PREFIX: v
+  #   env:
+  #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     INITIAL_VERSION: "1.0.0"
+  #     TAG_PREFIX: v
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
 
-      - name: Get tag metadata
-        id: tagger
-        uses: anothrNick/github-tag-action@1.73.0
-        env:
-          DRY_RUN: true
+  #       # This needs to set INITIAL_VERSION from VERSION file
+  #     - name: Get tag metadata
+  #       id: tagger
+  #       uses: anothrNick/github-tag-action@e528bc2b9628971ce0e6f823f3052d1dcd9d512c
+  #       env:
+  #         DRY_RUN: true
 
-      - name: Check if tag exists
-        uses: mukunku/tag-exists-action@v1.6.0
-        id: check_tag
-        with:
-          tag: "${{ steps.tagger.outputs.old_tag }}"
+  #     - name: Check if tag exists
+  #       id: check_tag
+  #       uses: mukunku/tag-exists-action@bdad1eaa119ce71b150b952c97351c75025c06a9
+  #       with:
+  #         tag: "${{ steps.tagger.outputs.old_tag }}"
 
-      - name: Create first tag
-        id: tag1
-        if: ${{ steps.check_tag.outputs.exists == 'false' }}
-        uses: anothrNick/github-tag-action@1.73.0
-        env:
-          CUSTOM_TAG: "${{ steps.tagger.outputs.old_tag }}"
+  #     - name: Create first tag
+  #       id: tag1
+  #       if: ${{ steps.check_tag.outputs.exists == 'false' }}
+  #       uses: anothrNick/github-tag-action@e528bc2b9628971ce0e6f823f3052d1dcd9d512c
+  #       env:
+  #         CUSTOM_TAG: "${{ steps.tagger.outputs.old_tag }}"
 
-      - name: Create next tag
-        id: tagN
-        if: ${{ steps.check_tag.outputs.exists == 'true' }}
-        uses: anothrNick/github-tag-action@1.73.0
+  #     - name: Create next tag
+  #       id: tagN
+  #       if: ${{ steps.check_tag.outputs.exists == 'true' }}
+  #       uses: anothrNick/github-tag-action@e528bc2b9628971ce0e6f823f3052d1dcd9d512c
 
-  create_release:
-    name: Create Release with Artifacts
+  # create_release:
+  #   name: Create Release with Artifacts
 
-    if: ${{ success() }}
-    needs: [ generate_tag ]
-    runs-on: ubuntu-latest
+  #   if: ${{ success() }}
+  #   needs: [ generate_tag ]
+  #   runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
+  #   permissions:
+  #     contents: write
 
-    steps:
-      - name: Download Artifacts
-        id: download_artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
+  #   steps:
+  #     - name: Download Artifacts
+  #       id: download_artifacts
+  #       uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+  #       with:
+  #         name: ${{ env.ARTIFACT_NAME }}
 
-      - name: Zip Artifacts
-        run: zip -r "$RELEASE_ARTIFACT" .
+  #     - name: Zip Artifacts
+  #       run: zip -r "$RELEASE_ARTIFACT" .
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: ${{ inputs.is_draft || true }} # FIXME
-          prerelease: ${{ inputs.is_prerelease || true }} # FIXME
-          make_latest: true
-          name: ${{ needs.generate_tag.outputs.tag }}
-          tag_name: ${{ needs.generate_tag.outputs.tag }}
-          # FIXME
-          body: |
-            Test this.
-            Move to `body_path` soon.
-          generate_release_notes: true
-          files: "${{ env.RELEASE_ARTIFACT }}"
-
-  clean_up:
-    name: Delete Artifacts
-
-    if: ${{ success() }}
-    needs: [ build_exe, create_release ]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: geekyeggo/delete-artifact@v5
-        with:
-          name: ${{ env.ARTIFACT_NAME }}
-          failOnError: false
+  #     - name: Create Release
+  #       uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
+  #       with:
+  #         name: ${{ needs.generate_tag.outputs.tag }}
+  #         tag_name: ${{ needs.generate_tag.outputs.tag }}
+  #         generate_release_notes: true
+  #         files: "${{ env.RELEASE_ARTIFACT }}"
+  #         draft: ${{ inputs.is_draft || true }} # FIXME
+  #         prerelease: ${{ inputs.is_prerelease || true }} # FIXME
+  #         make_latest: true
