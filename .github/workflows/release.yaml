@@ -19,7 +19,7 @@ jobs:
   build_exe:
     name: Build EXE with PyInstaller
 
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: windows-latest
 
     outputs:
