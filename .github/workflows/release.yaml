@@ -24,9 +24,8 @@ permissions:
   contents: read
 
 env:
-  ARTIFACT_NAME: "${{ github.sha }}"
-  REPO_NAME: "${{ github.event.repository.name }}"
-  RELEASE_ARTIFACT: "$REPO_NAME.zip"
+  ARTIFACT_NAME: ${{ github.sha }}
+  RELEASE_ARTIFACT: "${{ github.event.repository.name }}.zip"
 
 jobs:
   build_exe:
@@ -122,7 +121,7 @@ jobs:
         id: download_artifacts
         uses: actions/download-artifact@v4
         with:
-          name: "$ARTIFACT_NAME"
+          name: $ARTIFACT_NAME
 
       - name: Check 1
         run: ls -hAlt
