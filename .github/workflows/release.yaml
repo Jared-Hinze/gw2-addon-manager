@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      tag: ${{ steps.tagger.outputs.new_tag }}
+      tag: ${{ steps.tagN.outputs.new_tag || steps.tag1.outputs.new_tag }}
 
     permissions:
       contents: write
@@ -49,25 +49,26 @@ jobs:
         with:
           tag: "${{ steps.tagger.outputs.old_tag }}"
 
-      - name: Inspect outputs
-        run: |
-          echo "new_tag=${{ steps.tagger.outputs.new_tag }}"
-          echo "old_tag=${{ steps.tagger.outputs.old_tag }}"
-          echo "tag=${{ steps.tagger.outputs.tag }}"
-          echo "part=${{ steps.tagger.outputs.part }}"
-          echo "exists=${{ steps.check_tag.outputs.exists }}"
-
       - name: Create first tag
-        id: first_tag
+        id: tag1
         if: ${{ steps.check_tag.outputs.exists == 'false' }}
         uses: anothrNick/github-tag-action@1.73.0
         env:
           CUSTOM_TAG: "${{ steps.tagger.outputs.old_tag }}"
 
       - name: Create next tag
-        id: next_tag
+        id: tagN
         if: ${{ steps.check_tag.outputs.exists == 'true' }}
         uses: anothrNick/github-tag-action@1.73.0
         env:
           TAG_PREFIX: v
 
+  check:
+    name: Check generate_tag
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    needs: [generate_tag]
+    steps:
+      - name: Previous Output
+        run: echo "tag=${{ needs.generate_tag.outputs.tag }}"
