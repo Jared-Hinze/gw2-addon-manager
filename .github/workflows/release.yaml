@@ -10,16 +10,55 @@ on:
 
   pull_request:
     branches: [ main ]
-    types:
-      - closed
+    types: [ closed ]
 
 permissions:
   contents: read
 
 jobs:
+  build_exe:
+    name: Build EXE with PyInstaller
+
+    if: github.event.pull_request.merged == true
+    runs-on: windows-latest
+
+    outputs:
+      artifact_id: ${{ steps.upload_artifact.outputs.artifact-id }}
+      artifact_url: ${{ steps.upload_artifact.outputs.artifact-url }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m ensurepip --default-pip
+          python -m pip install --upgrade pip
+          python -m pip install pipx
+          pipx install uv
+          uv sync
+
+      - name: Run PyInstaller
+        run: |
+          uv run pyinstaller packaging.spec
+
+      - name: Upload Artifacts
+        id: upload_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.ref }}
+          path: dist/*
+
   generate_tag:
     name: Create next Release tag
 
+    if: ${{ success() }}
+    needs: [ build_exe ]
     runs-on: ubuntu-latest
 
     outputs:
@@ -60,21 +99,3 @@ jobs:
         id: tagN
         if: ${{ steps.check_tag.outputs.exists == 'true' }}
         uses: anothrNick/github-tag-action@1.73.0
-
-      - name: Inspect outputs
-        run: |
-          echo "new_tag=${{ steps.tagger.outputs.new_tag }}"
-          echo "old_tag=${{ steps.tagger.outputs.old_tag }}"
-          echo "tag=${{ steps.tagger.outputs.tag }}"
-          echo "part=${{ steps.tagger.outputs.part }}"
-          echo "exists=${{ steps.check_tag.outputs.exists }}"
-
-  check:
-    name: Check generate_tag
-    runs-on: windows-latest
-    permissions:
-      contents: read
-    needs: [generate_tag]
-    steps:
-      - name: Previous Output
-        run: echo "tag=${{ needs.generate_tag.outputs.tag }}"
