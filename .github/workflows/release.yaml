@@ -144,4 +144,4 @@ jobs:
             Test this.
             Move to `body_path` soon.
           generate_release_notes: true
-          files: "$RELEASE_ARTIFACT"
+          files: "${{ env.RELEASE_ARTIFACT }}"
