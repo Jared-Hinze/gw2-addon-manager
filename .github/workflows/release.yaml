@@ -3,6 +3,14 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      is_draft:
+        description: Release as Draft
+        type: boolean
+        default: false
+      is_prerelease:
+        description: Mark as Pre-Release
+        type: boolean
+        default: false
       create_tag:
         description: Generate a new tag for Release
         type: boolean
@@ -24,7 +32,6 @@ jobs:
 
     outputs:
       artifact_id: ${{ steps.upload_artifact.outputs.artifact-id }}
-      artifact_url: ${{ steps.upload_artifact.outputs.artifact-url }}
 
     steps:
       - name: Checkout Repository
@@ -100,3 +107,44 @@ jobs:
         if: ${{ steps.check_tag.outputs.exists == 'true' }}
         uses: anothrNick/github-tag-action@1.73.0
 
+  create_release:
+    name: Create Release with Artifacts
+
+    if: ${{ success() }}
+    needs: [ build_exe, generate_tag ]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Artifacts
+        id: download_artifacts
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids:
+            - ${{ needs.build_exe.outputs.artifact_id }}
+
+      - name: Create Release
+        uses: actions/create-release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ needs.generate_tag.outputs.tag }}
+          release_name: ${{ needs.generate_tag.outputs.tag }}
+          body: |
+            Testing body.
+            Will need to move to `body_path` soon.
+          draft: ${{ inputs.is_draft || true }} # for now
+          prerelease: ${{ inputs.is_prerelease || true }} # for now
+
+      - name: Upload Release Artifacts
+        uses: actions/upload-release-asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ${{ steps.download_artifacts.outputs.download-path }}
+          asset_name: ${{ github.event.repository.name }}
+          asset_content_type: application/zip
