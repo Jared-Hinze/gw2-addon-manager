@@ -7,7 +7,7 @@ on:
     workflows: [ Validate Code Changes ]
     types: [ completed ]
     # branches: [ main ]
-    branches: [ jhinze/* ]
+    branches: [ jhinze/** ]
 
 jobs:
   create_tag:
