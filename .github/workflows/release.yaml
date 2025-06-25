@@ -83,7 +83,9 @@ jobs:
       - name: Test python-semantic-release
         uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52
         with:
+          # build: true
           build: false
           commit: true
           push: true
+          prerelease: true
           tag: true
