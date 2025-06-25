@@ -74,6 +74,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      id-token: write
       contents: write
 
     steps:
@@ -84,8 +85,10 @@ jobs:
         uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52
         with:
           # build: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           build: false
           commit: true
           push: true
-          prerelease: true
           tag: true
+          prerelease: true
+          vcs_release: true
