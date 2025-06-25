@@ -32,8 +32,13 @@ jobs:
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
 
+        # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
-        run: uv version --bump minor
+        run: |
+          version="v$(uv version --short)"
+          if [[ -n $(git tag -l $version) ]]; then
+            uv version --bump minor
+          fi
 
       - name: Commit and Push changes
         uses: planetscale/ghcommit-action@6a383e778f6620afde4bf4b45069d3c6983c1ae2
