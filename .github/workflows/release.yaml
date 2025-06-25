@@ -1,6 +1,7 @@
 name: Create New Release
 
-# If a tag was created - create a release.
+# Create a new tag for release once a PR is merged.
+# If a tag was created successfully - create a release.
 on:
   workflow_dispatch:
     inputs:
@@ -13,17 +14,45 @@ on:
         type: boolean
         default: true
 
-  workflow_run:
-    workflows: [ Create New Tag ]
-    types: [ completed ]
-    branches-ignore: [ main ]
+  pull_request:
+    types: [ closed ]
 
 jobs:
-  create_release:
-    name: Create Release with Artifacts
+  tag:
+    name: Create Tag
     if: |
-      github.event.workflow_run.conclusion == 'success'
+      github.event.pull_request.merged == true
       || github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+
+      - name: Handle Tagging
+        id: tagger
+        run: |
+          version="v$(uv version --short)"
+          if [[ -z $(git tag -l $version) ]]; then
+            echo "Creating new tag: $version"
+            git tag $version
+            git push origin refs/tags/$version
+          else
+            echo "Skipping: tag $version already exists."
+          fi
+
+          echo "tag=$version" >> $GITHUB_OUTPUT
+
+  release:
+    name: Create Release with Artifacts
+    if: ${{ success() }}
 
     runs-on: ubuntu-latest
 
