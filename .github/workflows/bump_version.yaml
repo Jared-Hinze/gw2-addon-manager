@@ -10,15 +10,15 @@ on:
     types: [ opened ]
     paths: [ src/** ]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   bump_version:
     name: Bump pyproject.toml Version
 
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout Repository
