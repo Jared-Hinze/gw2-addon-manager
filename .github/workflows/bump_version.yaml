@@ -2,11 +2,6 @@ name: Bump Current Version
 
 on:
   workflow_dispatch:
-    inputs:
-      target:
-        description: The target branch you want to bump the version on.
-        type: string
-        default: jhinze/
 
   pull_request:
     branches-ignore: [ main ]
