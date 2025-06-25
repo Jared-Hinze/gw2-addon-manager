@@ -11,6 +11,7 @@ on:
   pull_request:
     branches-ignore: [ main ]
     types: [ opened ]
+    paths: [ src/** ]
 
 jobs:
   bump_version:
