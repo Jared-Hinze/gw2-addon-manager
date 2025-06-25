@@ -35,12 +35,7 @@ jobs:
       - name: Handle Tagging
         id: tagger
         run: |
-          version=$(uv version --short)
-          if [ $? -ne 0 ]; then
-            echo "Something has gone wrong. Cannot read from pyproject.toml"
-            exit 1
-          fi
-
+          version="v$(uv version --short)"
           if [[ -z $(git tag -l $version) ]]; then
             echo "Creating new tag: $version"
             git tag $version
