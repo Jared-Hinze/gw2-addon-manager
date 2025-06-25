@@ -1,6 +1,7 @@
 [project]
 name = "gw2-addon-manager"
 description = "A simple tool to manage addons for Guild Wars 2."
+# This is automatically adjusted - do not manually change!
 version = "1.0.0"
 
 requires-python = ">=3.11"
@@ -47,11 +48,3 @@ disable_error_code = [
 	"union-attr",
 	"var-annotated",
 ]
-
-# [tool.semantic_release]
-# build_command = "uv run pyinstaller packaging.spec"
-[tool.semantic_release.branches.all]
-match = ".*"
-# [tool.semantic_release.publish]
-# dist_glob_patterns
-# upload_to_vcs_release

@@ -1,14 +1,12 @@
 name: Create New Release
 
+# Create a new tag for release once a PR is merged.
+# If a tag was created successfully - create a release.
 on:
   workflow_dispatch:
     inputs:
-      create_release:
-        description: Generate a new Release
-        type: boolean
-        default: false
       is_draft:
-        description: Release as Draft
+        description: Mark as Draft
         type: boolean
         default: true
       is_prerelease:
@@ -16,34 +14,63 @@ on:
         type: boolean
         default: true
 
-  workflow_run:
-    workflows: [ Create New Tag ]
-    types: [ completed ]
-    # branches: [ main ]
-    branches: [ jhinze/* ]
+  pull_request:
+    types: [ closed ]
 
-  push:
-    tags: [ '*' ]
+permissions:
+  contents: write
 
 jobs:
-  create_release:
-    name: Create Release with Artifacts
+  create_tag:
+    name: Create Tag
+    if: |
+      github.event.pull_request.merged == true
+      || github.event_name == 'workflow_dispatch'
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' || inputs.create_release }}
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+
+      - name: Handle Tagging
+        id: tagger
+        run: |
+          version="v$(uv version --short)"
+          if [[ -z $(git tag -l $version) ]]; then
+            echo "Creating new tag: $version"
+            git tag $version
+            git push origin refs/tags/$version
+          else
+            echo "Skipping: tag $version already exists."
+          fi
+
+          echo "tag=$version" >> $GITHUB_OUTPUT
+
+    outputs:
+      tag: ${{ steps.tagger.outputs.tag }}
+
+  release:
+    name: Create Release with Artifacts
+    if: ${{ success() }}
+    needs: [ create_tag ]
+
+    runs-on: ubuntu-latest
 
     env:
       REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
-      - name: Download Artifacts
-        id: download_artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v11
         with:
-          name: ${{ github.sha }}
+          ref: ${{ github.ref }}
+          workflow: ci.yaml
+          workflow_search: true
 
       - name: Zip Artifacts
         run: zip -r ${REPO_NAME}.zip . -x *.sigstore.json
@@ -51,12 +78,12 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
         with:
-          name: ${{ github.event.workflow_run.outputs.tag }}
-          tag_name: ${{ github.event.workflow_run.outputs.tag }}
+          name: ${{ needs.create_tag.outputs.tag }}
+          tag_name: ${{ needs.create_tag.outputs.tag }}
           generate_release_notes: true
           files: |
             ${{ env.REPO_NAME }}.zip
             *.sigstore.json
-          draft: ${{ inputs.is_draft || true }} # FIXME
-          prerelease: ${{ inputs.is_prerelease || true }} # FIXME
+          draft: ${{ inputs.is_draft || false }}
+          prerelease: ${{ inputs.is_prerelease || false }}
           make_latest: true
