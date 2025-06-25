@@ -3,6 +3,7 @@ name: Bump Current Version
 on:
   workflow_dispatch:
 
+  # bumping only happens during PR's and on actual code changes
   pull_request:
     branches-ignore: [ main ]
     types: [ opened ]
