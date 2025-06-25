@@ -2,6 +2,11 @@ name: Bump Current Version
 
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: The target branch you want to bump the version on.
+        type: string
+        default: jhinze/
 
   pull_request:
     branches-ignore: [ main ]
@@ -19,6 +24,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+        with:
+          ref: ${{ github.head_ref || github.ref }}
 
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
@@ -26,8 +33,13 @@ jobs:
       - name: Bump Version
         run: uv version --bump minor
 
-      - name: Commit and Push
+      - name: Commit Changes
         run: |
-          git add .
-          git commit -m "Version Bump"
-          git push origin ${{ github.ref }} --dry-run
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git commit -a -m "Version Bump"
+
+      - name: Push Changes
+        uses: ad-m/github-push-action@d91a481090679876dfc4178fef17f286781251df
+        with:
+          branch: ${{ github.head_ref || github.ref }}
