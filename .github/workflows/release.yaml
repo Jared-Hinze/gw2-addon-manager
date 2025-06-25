@@ -78,8 +78,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
         with:
-          name: ${{ github.event.workflow_run.outputs.tag }}
-          tag_name: ${{ github.event.workflow_run.outputs.tag }}
+          name: ${{ needs.create_tag.outputs.tag }}
+          tag_name: ${{ needs.create_tag.outputs.tag }}
           generate_release_notes: true
           files: |
             ${{ env.REPO_NAME }}.zip
