@@ -2,11 +2,6 @@ name: Create New Tag
 
 on:
   workflow_dispatch:
-    inputs:
-      create_tag:
-        description: Generate a new tag for Release
-        type: boolean
-        default: false
 
   workflow_run:
     workflows: [ Validate Code Changes ]
@@ -14,12 +9,16 @@ on:
     # branches: [ main ]
     branches: [ jhinze/* ]
 
+env:
+  ctx: ${{ github.event.workflow_run }}
+
 jobs:
   create_tag:
     name: Create next Release tag
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' || inputs.create_tag }}
-    needs: [ build_exe ]
+    if: |
+      github.event_name == 'workflow_dispatch'
+      || (env.ctx.conclusion == 'success' && env.ctx.type == 'closed')
     runs-on: ubuntu-latest
 
     permissions:

@@ -6,7 +6,7 @@ on:
   pull_request:
     # branches: [ main ]
     branches: [ jhinze/* ]
-    types: [ closed ]
+    types: [ opened, synchronize, closed ]
 
 jobs:
   build_exe:
@@ -40,3 +40,6 @@ jobs:
         with:
           name: ${{ github.sha }}
           path: dist/*
+
+    outputs:
+      trigger: ${{ github.event.type }}

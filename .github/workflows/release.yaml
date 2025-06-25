@@ -3,10 +3,6 @@ name: Create New Release
 on:
   workflow_dispatch:
     inputs:
-      create_release:
-        description: Generate a new Release
-        type: boolean
-        default: false
       is_draft:
         description: Release as Draft
         type: boolean
@@ -29,7 +25,9 @@ jobs:
   create_release:
     name: Create Release with Artifacts
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' || inputs.create_release }}
+    if: |
+      contains(fromJSON('["push", "workflow_dispatch"]'), github.event_name)
+      || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
 
     permissions:
