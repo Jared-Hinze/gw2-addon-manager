@@ -1,7 +1,7 @@
 [project]
 name = "gw2-addon-manager"
 description = "A simple tool to manage addons for Guild Wars 2."
-dynamic = ["version"]
+version = "1.0.0"
 
 requires-python = ">=3.11"
 
@@ -24,9 +24,15 @@ license-files = ["LICENSE"]
 keywords = ["guild wars 2", "gw2"]
 
 [dependency-groups]
-dev = [
+build-exe = [
     "pyinstaller>=6.14.1",
+]
+type-hints = [
     "types-requests>=2.32.4.20250611",
+]
+dev = [
+	{include-group = "build-exe"},
+	{include-group = "type-hints"},
 ]
 
 [tool.mypy]
@@ -41,3 +47,11 @@ disable_error_code = [
 	"union-attr",
 	"var-annotated",
 ]
+
+# [tool.semantic_release]
+# build_command = "uv run pyinstaller packaging.spec"
+[tool.semantic_release.branches.all]
+match = ".*"
+# [tool.semantic_release.publish]
+# dist_glob_patterns
+# upload_to_vcs_release

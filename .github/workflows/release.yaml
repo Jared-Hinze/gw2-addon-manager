@@ -1,39 +1,62 @@
-name: Release
+name: Create New Release
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [ "main" ]
-    types:
-      - closed
+    inputs:
+      create_release:
+        description: Generate a new Release
+        type: boolean
+        default: false
+      is_draft:
+        description: Release as Draft
+        type: boolean
+        default: true
+      is_prerelease:
+        description: Mark as Pre-Release
+        type: boolean
+        default: true
 
-permissions:
-  contents: read
+  workflow_run:
+    workflows: [ Create New Tag ]
+    types: [ completed ]
+    # branches: [ main ]
+    branches: [ jhinze/* ]
+
+  push:
+    tags: [ '*' ]
 
 jobs:
-  if_merged:
-    if: github.event.pull_request.merged == true
-    runs-on: windows-latest
+  create_release:
+    name: Create Release with Artifacts
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' || inputs.create_release }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    env:
+      REPO_NAME: ${{ github.event.repository.name }}
+
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v5
+      - name: Download Artifacts
+        id: download_artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          python-version: "3.13"
+          name: ${{ github.sha }}
 
-      - name: Install dependencies
-        run: |
-          python -m ensurepip --default-pip
-          python -m pip install --upgrade pip
-          python -m pip install pipx
-          pipx install uv
-          uv sync
+      - name: Zip Artifacts
+        run: zip -r ${REPO_NAME}.zip . -x *.sigstore.json
 
-      - name: Run PyInstaller
-        run: |
-          uv run pyinstaller packaging.spec
-
-      - uses: actions/upload-artifact@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
         with:
-          path: dist/*
+          name: ${{ github.event.workflow_run.outputs.tag }}
+          tag_name: ${{ github.event.workflow_run.outputs.tag }}
+          generate_release_notes: true
+          files: |
+            ${{ env.REPO_NAME }}.zip
+            *.sigstore.json
+          draft: ${{ inputs.is_draft || true }} # FIXME
+          prerelease: ${{ inputs.is_prerelease || true }} # FIXME
+          make_latest: true
