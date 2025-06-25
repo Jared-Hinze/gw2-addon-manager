@@ -37,10 +37,11 @@ jobs:
       REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
-      - name: Download Artifacts
-        id: download_artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v11
         with:
+          workflow: ci.yaml
           name: ${{ github.sha }}
 
       - name: Zip Artifacts
