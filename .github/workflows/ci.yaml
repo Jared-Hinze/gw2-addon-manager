@@ -4,9 +4,11 @@ on:
   workflow_dispatch:
 
   pull_request:
-    # branches: [ main ]
-    branches: [ jhinze/* ]
     types: [ opened, synchronize, closed ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build_exe:
@@ -40,6 +42,3 @@ jobs:
         with:
           name: ${{ github.sha }}
           path: dist/*
-
-    outputs:
-      trigger: ${{ github.event.type }}
