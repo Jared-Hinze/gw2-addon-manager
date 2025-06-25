@@ -18,7 +18,7 @@ on:
     types: [ closed ]
 
 jobs:
-  tag:
+  create_tag:
     name: Create Tag
     if: |
       github.event.pull_request.merged == true
@@ -53,6 +53,7 @@ jobs:
   release:
     name: Create Release with Artifacts
     if: ${{ success() }}
+    needs: [ create_tag ]
 
     runs-on: ubuntu-latest
 
@@ -83,6 +84,6 @@ jobs:
           files: |
             ${{ env.REPO_NAME }}.zip
             *.sigstore.json
-          draft: ${{ inputs.is_draft || true }} # FIXME
-          prerelease: ${{ inputs.is_prerelease || true }} # FIXME
+          draft: ${{ inputs.is_draft || false }}
+          prerelease: ${{ inputs.is_prerelease || false }}
           make_latest: true
