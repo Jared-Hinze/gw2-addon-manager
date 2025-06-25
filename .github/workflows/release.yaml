@@ -71,7 +71,6 @@ jobs:
           ref: ${{ github.ref }}
           workflow: ci.yaml
           workflow_search: true
-          search_artifacts: true
 
       - name: Zip Artifacts
         run: zip -r ${REPO_NAME}.zip . -x *.sigstore.json
