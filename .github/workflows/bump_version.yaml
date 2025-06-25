@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Get Environment
-        uses: .github/workflows/environment.yaml
+        uses: ./.github/workflows/environment.yaml
 
       - name: Bump Version
         run: uv version --bump minor

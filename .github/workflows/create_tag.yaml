@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Get Environment
-        uses: .github/workflows/environment.yaml
+        uses: ./.github/workflows/environment.yaml
 
       - name: Handle Tagging
         id: tagger

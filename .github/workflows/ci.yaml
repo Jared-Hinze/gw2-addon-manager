@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Get Environment
-        uses: .github/workflows/environment.yaml
+        uses: ./.github/workflows/environment.yaml
 
       - name: Run PyInstaller
         run: uv run pyinstaller packaging.spec
