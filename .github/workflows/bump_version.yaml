@@ -42,4 +42,4 @@ jobs:
         with:
           commit_message: "Workflow Bot 🤖: Version Bump"
           repo: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref_name }}
+          branch: ${{ github.head_ref || github.ref }}
