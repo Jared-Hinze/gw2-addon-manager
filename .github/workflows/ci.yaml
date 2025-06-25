@@ -1,22 +1,19 @@
 name: Validate Code Changes
 
+# Ensure that the latest code put into a PR builds the EXE successfully.
 on:
   workflow_dispatch:
 
   pull_request:
-    types: [ opened, synchronize, closed ]
+    types: [ opened, synchronize ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build_exe:
+  build:
     name: Build EXE with PyInstaller
-    if: |
-      contains(fromJSON('["open", "synchronize"]'), github.event.type)
-      || github.event.pull_request.merged == true
-      || github.event_name == 'workflow_dispatch'
 
     runs-on: windows-latest
 

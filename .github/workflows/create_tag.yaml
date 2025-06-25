@@ -1,22 +1,19 @@
 name: Create New Tag
 
+# Create a new tag for release once a PR is merged.
 on:
   workflow_dispatch:
 
-  workflow_run:
-    workflows: [ Validate Code Changes ]
-    types: [ completed ]
-    # branches: [ main ]
-    branches: [ jhinze/** ]
+  pull_request:
+    types: [ closed ]
 
 jobs:
   create_tag:
     name: Create Tag
-
     if: |
-      ( github.event.workflow_run.conclusion == 'success'
-        && github.event.workflow_run.type == 'closed' )
+      github.event.pull_request.merged == true
       || github.event_name == 'workflow_dispatch'
+
     runs-on: ubuntu-latest
 
     permissions:

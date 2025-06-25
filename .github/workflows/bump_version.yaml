@@ -1,9 +1,10 @@
 name: Bump Current Version
 
+# Automatically bump the pyproject.toml and corresponding uv.lock file's minor
+# version when a PR is created for src changes.
 on:
   workflow_dispatch:
 
-  # Bumping only happens during PR's and on actual code changes
   pull_request:
     branches-ignore: [ main ]
     types: [ opened ]

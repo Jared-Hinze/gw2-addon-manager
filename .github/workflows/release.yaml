@@ -1,5 +1,6 @@
 name: Create New Release
 
+# If a tag was created - create a release.
 on:
   workflow_dispatch:
     inputs:
@@ -15,18 +16,14 @@ on:
   workflow_run:
     workflows: [ Create New Tag ]
     types: [ completed ]
-    # branches: [ main ]
-    branches: [ jhinze/** ]
-
-  push:
-    tags: [ '*' ]
+    branches-ignore: [ main ]
 
 jobs:
   create_release:
     name: Create Release with Artifacts
     if: |
       github.event.workflow_run.conclusion == 'success'
-      || contains(fromJSON('["push", "workflow_dispatch"]'), github.event_name)
+      || github.event_name == 'workflow_dispatch'
 
     runs-on: ubuntu-latest
 
