@@ -1,6 +1,7 @@
 [project]
 name = "gw2-addon-manager"
 description = "A simple tool to manage addons for Guild Wars 2."
+# This is automatically adjusted - do not manually change!
 version = "1.0.0"
 
 requires-python = ">=3.11"
