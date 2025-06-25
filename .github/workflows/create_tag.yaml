@@ -11,7 +11,7 @@ on:
 
 jobs:
   create_tag:
-    name: Create next Release tag
+    name: Create Tag
 
     if: |
       ( github.event.workflow_run.conclusion == 'success'
