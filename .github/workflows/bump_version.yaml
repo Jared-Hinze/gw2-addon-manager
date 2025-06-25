@@ -32,9 +32,15 @@ jobs:
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
         run: |
+          echo "Existing Tags..."
+          git tag --list
+
           version="v$(uv version --short)"
-          if [[ -n $(git tag -l $version) ]]; then
+          echo "Current version: $version"
+          if [[ -n $(git tag --list $version) ]]; then
             uv version --bump minor
+          else
+            echo "Skipping: $version not in tags."
           fi
 
       - name: Commit and Push changes
