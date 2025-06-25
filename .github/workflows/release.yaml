@@ -50,6 +50,9 @@ jobs:
 
           echo "tag=$version" >> $GITHUB_OUTPUT
 
+    outputs:
+      tag: ${{ steps.tagger.outputs.tag }}
+
   release:
     name: Create Release with Artifacts
     if: ${{ success() }}
