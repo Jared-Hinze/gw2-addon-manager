@@ -17,8 +17,9 @@ jobs:
     name: Create next Release tag
 
     if: |
-      github.event_name == 'workflow_dispatch'
-      || (env.ctx.conclusion == 'success' && env.ctx.type == 'closed')
+      ( github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.type == 'closed' )
+      || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     permissions:
