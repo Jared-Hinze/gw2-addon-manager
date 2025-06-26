@@ -1,14 +1,11 @@
 # Description:
 A simple tool to manage addons for Guild Wars 2.
 
-# Building:
-Run `pyinstaller packaging.spec`.
-
 # Application:
-See `/dist/gw2-addon-manager.exe`
+Please download the latest release [here](https://github.com/Jared-Hinze/gw2-addon-manager/releases/latest).
 
 # Configuration:
-The following is a breakdown of typical configuration files and their subsequent keys:
+The `configs/` folder holds the following user customizable configuration files.
 ## settings.yaml:
 This file will largely be for individual customization of the application's behaviors
 - **install_path**:
@@ -39,6 +36,32 @@ This file is largely to configure Python's logging.py logger.
 
 Please refer to https://docs.python.org/3/library/logging.config.html#logging-config-dictschema.
 
-# Moving the Application:
-If you intend to relocate the application do one of the following:
-- Ensure you keep `gw2-addon-manager.exe`, `configs`, and `logs` together in the same parent folder.
+# Portfolio Highlights:
+This project demonstrates a variety of important industry standards and techniques along with innovative approaches.<br />
+Note: some of the approaches taken were solely for the purpose of demonstrating knowledge/skills.
+## VCS:
+- Git/GitHub
+- Pre-commit (coming soon)
+- Semantic Versioning
+- Dependency Groups
+- Lock Files
+- Licensing
+## CI/CD:
+- Automated Workflows
+  - Version Bumping
+  - Status Checks
+    - Unit Tests (coming soon)
+    - Verify PR Builds Complete
+  - Tagging
+  - Releasing
+- Reusable Workflows
+- Bot Assistance
+## Python:
+- Packaging
+- MVC Design Pattern
+- Cross Platform Design
+- Threading
+- Calling RESTful APIs
+- Advanced YAML Parsing
+- Logging
+- Enumeration
