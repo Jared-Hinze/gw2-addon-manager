@@ -72,6 +72,7 @@ jobs:
 
     env:
       REPO_NAME: ${{ github.event.repository.name }}
+      ARTIFACT_DIR: ${{ needs.build.outputs.artifact_name }}
 
     steps:
       - name: Download artifact
@@ -81,11 +82,11 @@ jobs:
           workflow: ci.yaml
           run_id: ${{ needs.build.outputs.run_id }}
 
-      - name: Inspect
-        run: ls -hAltR
-
-      - name: Zip Artifacts
-        run: zip -r ${REPO_NAME}.zip . -x *.sigstore.json
+      - name: ReZip Artifacts
+        run: |
+          mv ${{ env.ARTIFACT_DIR }}/* .
+          rmdir ${{ env.ARTIFACT_DIR }}
+          zip -r ${REPO_NAME}.zip . -x *.sigstore.json
 
       - name: Create Release
         uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8

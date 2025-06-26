@@ -9,6 +9,9 @@ on:
       run_id:
         description: Used to get artifacts from this run.
         value: ${{ github.run_id }}
+      artifact_name:
+        description: Name of the artifact created
+        value: ${{ env.artifact_name }}
 
   pull_request:
     types: [ opened, synchronize ]
@@ -21,6 +24,9 @@ concurrency:
 permissions:
   contents: read
   id-token: write
+
+env:
+  artifact_name: ${{ github.sha }}
 
 jobs:
   build:
@@ -47,5 +53,5 @@ jobs:
         id: upload
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: ${{ github.sha }}
+          name: ${{ env.artifact_name }}
           path: dist/*
