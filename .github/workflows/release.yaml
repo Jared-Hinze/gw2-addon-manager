@@ -28,16 +28,7 @@ jobs:
 
     runs-on: windows-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-
-      - name: Final CI Check
-        id: ci
-        uses: ./.github/workflows/ci.yaml
-
-    outputs:
-      run_id: ${{ steps.ci.outputs.run_id }}
+    uses: ./.github/workflows/ci.yaml
 
   create_tag:
     name: Create Tag
