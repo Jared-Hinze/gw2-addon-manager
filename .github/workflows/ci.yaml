@@ -4,6 +4,12 @@ name: Validate Code Changes
 on:
   workflow_dispatch:
 
+  workflow_call:
+    outputs:
+      run_id:
+        description: Used to get artifacts from this run.
+        value: ${{ github.run_id }}
+
   pull_request:
     types: [ opened, synchronize ]
     paths: [ src/** ]
