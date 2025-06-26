@@ -75,7 +75,7 @@ jobs:
       ARTIFACT_NAME: ${{ github.sha }}
 
     steps:
-      - name: Download artifact
+      - name: Download Artifacts
         id: download-artifact
         uses: dawidd6/action-download-artifact@ac66b43f0e6a346234dd65d4d0c8fbb31cb316e5
         with:
