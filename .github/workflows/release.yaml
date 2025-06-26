@@ -72,7 +72,7 @@ jobs:
 
     env:
       REPO_NAME: ${{ github.event.repository.name }}
-      ARTIFACT_DIR: ${{ needs.build.outputs.artifact_name }}
+      ARTIFACT_NAME: ${{ github.sha }}
 
     steps:
       - name: Download artifact
@@ -84,8 +84,8 @@ jobs:
 
       - name: ReZip Artifacts
         run: |
-          mv ${{ env.ARTIFACT_DIR }}/* .
-          rmdir ${{ env.ARTIFACT_DIR }}
+          mv ${ARTIFACT_NAME}/* .
+          rmdir ${ARTIFACT_NAME}
           zip -r ${REPO_NAME}.zip . -x *.sigstore.json
 
       - name: Create Release
