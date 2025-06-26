@@ -81,6 +81,9 @@ jobs:
           workflow: ci.yaml
           run_id: ${{ needs.build.outputs.run_id }}
 
+      - name: Inspect
+        run: ls -hAltR
+
       - name: Zip Artifacts
         run: zip -r ${REPO_NAME}.zip . -x *.sigstore.json
 
