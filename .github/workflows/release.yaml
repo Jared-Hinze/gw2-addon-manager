@@ -68,7 +68,7 @@ jobs:
         id: download-artifact
         uses: dawidd6/action-download-artifact@ac66b43f0e6a346234dd65d4d0c8fbb31cb316e5
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref || github.ref }}
           workflow: ci.yaml
           workflow_search: true
 
