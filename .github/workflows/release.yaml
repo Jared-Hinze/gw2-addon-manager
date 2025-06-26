@@ -26,18 +26,11 @@ jobs:
     name: CI Sanity Check
     if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
 
-    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-
-      - name: Final CI Check
-        id: ci
-        uses: ./.github/workflows/ci.yaml
-
-    outputs:
-      run_id: ${{ steps.ci.outputs.run_id }}
+    uses: ./.github/workflows/ci.yaml
 
   create_tag:
     name: Create Tag
@@ -79,17 +72,21 @@ jobs:
 
     env:
       REPO_NAME: ${{ github.event.repository.name }}
+      ARTIFACT_NAME: ${{ github.sha }}
 
     steps:
-      - name: Download artifact
+      - name: Download Artifacts
         id: download-artifact
         uses: dawidd6/action-download-artifact@ac66b43f0e6a346234dd65d4d0c8fbb31cb316e5
         with:
           workflow: ci.yaml
           run_id: ${{ needs.build.outputs.run_id }}
 
-      - name: Zip Artifacts
-        run: zip -r ${REPO_NAME}.zip . -x *.sigstore.json
+      - name: ReZip Artifacts
+        run: |
+          mv ${ARTIFACT_NAME}/* .
+          rmdir ${ARTIFACT_NAME}
+          zip -r ${REPO_NAME}.zip . -x *.sigstore.json
 
       - name: Create Release
         uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
