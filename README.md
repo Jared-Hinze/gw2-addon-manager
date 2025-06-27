@@ -46,6 +46,7 @@ Note: some of the approaches taken were solely for the purpose of demonstrating 
 - Dependency Groups
 - Lock Files
 - Licensing
+- Code Signing
 ## CI/CD:
 - Automated Workflows
   - Version Bumping
