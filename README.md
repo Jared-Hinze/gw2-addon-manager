@@ -1,5 +1,5 @@
 # Description:
-A simple tool to manage addons for Guild Wars 2.
+This is a GUI tool that provides a simple interface to install common Guild Wars 2 addons.
 
 # Application:
 Please download the latest release [here](https://github.com/Jared-Hinze/gw2-addon-manager/releases/latest).
