@@ -9,10 +9,11 @@ Please read the [wiki](https://github.com/Jared-Hinze/gw2-addon-manager/wiki).
 
 # Portfolio Highlights:
 This project demonstrates a variety of important industry standards and techniques along with innovative approaches.<br />
-Note: some of the approaches taken were solely for the purpose of demonstrating knowledge/skills.
+
+**Note:** some of the approaches taken were solely for the purpose of demonstrating knowledge/skills.
 ## VCS:
 - Git/GitHub
-- Pre-commit (coming soon)
+- Pre-commit
 - Semantic Versioning
 - Dependency Groups
 - Lock Files

@@ -8,9 +8,9 @@ requires-python = ">=3.11"
 
 readme = "README.md"
 dependencies = [
-    "requests>=2.32.4",
-    "ruamel-yaml>=0.18.14",
-    "ttkwidgets>=0.13.0",
+    "requests >=2.32.4, <3.0.0",
+    "ruamel-yaml >=0.18.14, <1.0.0",
+    "ttkwidgets >=0.13.0, <1.0.0",
 ]
 
 authors = [
@@ -26,14 +26,16 @@ keywords = ["guild wars 2", "gw2"]
 
 [dependency-groups]
 build-exe = [
-    "pyinstaller>=6.14.1",
+    "pyinstaller >=6.14.1, <7.0.0",
 ]
-type-hints = [
-    "types-requests>=2.32.4.20250611",
+static-type-checking = [
+    "mypy >=1.16.1, <2.0.0",
+    "types-requests >=2.32.4.20250611, <3.0.0.0",
 ]
 dev = [
-	{include-group = "build-exe"},
-	{include-group = "type-hints"},
+    "pre-commit >=4.2.0, <5.0.0",
+    {include-group = "build-exe"},
+    {include-group = "static-type-checking"},
 ]
 
 [tool.mypy]
