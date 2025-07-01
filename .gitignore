@@ -1,6 +1,3 @@
-# Environments
-.venv
-
 # PyInstaller
 packaging/
 dist/
