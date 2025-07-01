@@ -39,6 +39,9 @@ dev = [
     {include-group = "static-type-checking"},
 ]
 
+[tool.pytest.ini_options]
+pythonpath = [ "src" ]
+
 [tool.mypy]
 ignore_missing_imports = true
 check_untyped_defs = true
