@@ -76,7 +76,6 @@ class Table(CheckboxTreeview):
 
 	# --------------------------------------------------------------------------
 	def set_headers(self):
-
 		# ----------------------------------------------------------------------
 		def toggle_checks():
 			if any(self.get_checked()):
@@ -108,7 +107,7 @@ class Table(CheckboxTreeview):
 					("Treeheading.text", {"sticky": "we"})
 				]})
 			]})
-		])
+		])  # fmt: skip
 
 	# --------------------------------------------------------------------------
 	def fill_table(self, addons):
@@ -215,7 +214,6 @@ def create_ui(addons):
 
 # ==============================================================================
 def _make_log_btn(exit=False):
-
 	# --------------------------------------------------------------------------
 	def _open_logs_folder():
 		os.startfile(LOGS_DIR, "open")
