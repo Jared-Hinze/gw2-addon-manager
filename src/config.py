@@ -56,28 +56,8 @@ def initialize():
 		logging.warning("Unnecessary extra call to config.initialize")
 		return
 
-	# --------------------------------------------------------------------------
-	def _fix_paths(data: dict) -> dict:
-		if not data:
-			return {}
+	from parsers.logging import load
 
-		handlers = data.get("handlers") or {}
-		for handler, config in handlers.items():
-			try:
-				if "filename" in config:
-					target = LOGS_DIR / config["filename"]
-					target.parent.mkdir(parents=True, exist_ok=True)
-					target.touch(exist_ok=True)
-					config["filename"] = target
-			except Exception as e:
-				# Not logged
-				print(f"Failed to reconfigure {handler} with {config=}")
-				print(e)
-
-		return data
-
-	# --------------------------------------------------------------------------
-	with LOGGING_CONFIG.open() as f:
-		logging.config.dictConfig(_fix_paths(yaml.load(f)))
+	logging.config.dictConfig(load())
 
 	initialize.ran = True
