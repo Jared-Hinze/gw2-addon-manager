@@ -1,5 +1,3 @@
-# Python 3.13
-# ==============================================================================
 # This file is to parse addons.yaml and automatically make the result a class
 # object by leveraging @yaml.register_class and the yaml_tag class attribute.
 #

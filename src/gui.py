@@ -1,5 +1,3 @@
-# Python 3.13
-# ==============================================================================
 # I wanted to try a simple tk/ttk application before trying something a bit more
 # complicated. Further research suggests gtk may be a better choice later.
 
