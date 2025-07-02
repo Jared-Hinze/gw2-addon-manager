@@ -15,6 +15,7 @@ from parsers import load_yaml
 # ==============================================================================
 logger = logging.getLogger(__name__)
 
+
 # ==============================================================================
 # Classes
 # ==============================================================================
@@ -28,11 +29,13 @@ class Settings(dict):
 		attrs = ", ".join(f"{k}={v!r}" for k, v in self.items())
 		return f"{type(self).__name__}({attrs})"
 
+
 # ==============================================================================
 # Helpers
 # ==============================================================================
 def fqn(key):
 	return f"[{SETTINGS_CONFIG}@{key}]"
+
 
 # ------------------------------------------------------------------------------
 def ensure_key(settings, key):
@@ -41,6 +44,7 @@ def ensure_key(settings, key):
 		logger.critical(f"See: {fqn(key)}")
 		return False
 	return True
+
 
 # ------------------------------------------------------------------------------
 def ensure_bool(settings, key):
@@ -55,6 +59,7 @@ def ensure_bool(settings, key):
 		return
 
 	settings[key] = value in ('t', 'y', "true", "yes", "on")
+
 
 # ------------------------------------------------------------------------------
 def ensure_path(settings, key):
@@ -72,6 +77,7 @@ def ensure_path(settings, key):
 	if not value.exists():
 		logger.error(f'Invalid Path "{value}".')
 		logger.error(f"See {fqn(key)}.")
+
 
 # ==============================================================================
 # Loader

@@ -7,11 +7,13 @@ import logging
 # Need to initialize logging and path constants before importing local libraries
 # so dependencies that use logging can be configured by this call
 import config
+
 config.initialize()
 
 # Local Libraries
 import gui
 from parsers import addons
+
 
 # ==============================================================================
 def main():
@@ -22,6 +24,7 @@ def main():
 
 	logging.info("Closing GUI")
 	logging.info('-' * 100)
+
 
 # ==============================================================================
 if __name__ == "__main__":

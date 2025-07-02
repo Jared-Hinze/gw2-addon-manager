@@ -16,14 +16,17 @@ import requests
 # ==============================================================================
 logger = logging.getLogger(__name__)
 
+
 # ==============================================================================
 class ApiException(Exception):
 	pass
+
 
 # ==============================================================================
 class AssetType(IntEnum):
 	DLL = auto()
 	ZIP = auto()
+
 
 # ==============================================================================
 class ApiRequest(ABC):
@@ -58,11 +61,13 @@ class ApiRequest(ABC):
 			zf = ZipFile(BytesIO(response.content))
 			zf.extract(self.dll, self.dst.parent)
 
+
 # ==============================================================================
 class DirectRequest(ApiRequest):
 	# --------------------------------------------------------------------------
 	def get_asset(self) -> tuple[requests.Response, AssetType]:
 		return requests.get(self.url), AssetType.DLL
+
 
 # ==============================================================================
 class GitRequest(ApiRequest):

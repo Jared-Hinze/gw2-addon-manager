@@ -5,7 +5,6 @@
 import logging
 import os
 import tkinter as tk
-from collections import namedtuple
 from concurrent import futures
 from time import sleep
 from tkinter import ttk
@@ -29,6 +28,7 @@ if TYPE_CHECKING:
 # ==============================================================================
 logger = logging.getLogger(__name__)
 app = tk.Tk()
+
 
 # ==============================================================================
 # UI
@@ -136,6 +136,7 @@ class Table(CheckboxTreeview):
 			for iid in self.iid_to_addon.keys():
 				self.set(iid, column="Status", value='')
 			fn(self)
+
 		return wrapper
 
 	# --------------------------------------------------------------------------
@@ -185,6 +186,7 @@ class Table(CheckboxTreeview):
 					self.set(addon.iid, column="Installed", value=str(addon.installed))
 					app.update()
 
+
 # ==============================================================================
 class Button(tk.Button):
 	def __init__(self, parent, **kwargs):
@@ -194,6 +196,7 @@ class Button(tk.Button):
 	# --------------------------------------------------------------------------
 	def default_action(self):
 		return lambda event, widget=self: widget.invoke()
+
 
 # ==============================================================================
 def create_ui(addons):
@@ -209,6 +212,7 @@ def create_ui(addons):
 
 	app.update()
 
+
 # ==============================================================================
 def _make_log_btn(exit=False):
 
@@ -221,6 +225,7 @@ def _make_log_btn(exit=False):
 	# --------------------------------------------------------------------------
 	return Button(app, name="btnLogs", text="View Logs", command=_open_logs_folder)
 
+
 # ==============================================================================
 def _error_ui():
 	lbl = tk.Label(app, text="Failed to parse addons.yaml")
@@ -228,6 +233,7 @@ def _error_ui():
 
 	btn = _make_log_btn(exit=True)
 	btn.pack()
+
 
 # ==============================================================================
 def _app_ui(addons):
@@ -244,9 +250,11 @@ def _app_ui(addons):
 	btn = _make_log_btn()
 	btn.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
+
 # ==============================================================================
 def close():
 	app.destroy()
+
 
 # ==============================================================================
 def show():

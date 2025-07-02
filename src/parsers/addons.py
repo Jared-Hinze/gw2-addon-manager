@@ -21,6 +21,7 @@ from parsers import Settings, load_yaml
 # ==============================================================================
 logger = logging.getLogger(__name__)
 
+
 # ==============================================================================
 # Classes
 # ==============================================================================
@@ -29,6 +30,7 @@ class CoreAddon:
 	@classmethod
 	def from_yaml(cls, loader, node):
 		return cls(**loader.construct_mapping(node, deep=True))
+
 
 # ==============================================================================
 class Addon(CoreAddon):
@@ -66,10 +68,12 @@ class Addon(CoreAddon):
 			self.dst.unlink()
 			self.removed = True
 
+
 # ==============================================================================
 @yaml.register_class
 class RawAddon(Addon):
 	yaml_tag = "!RawAddon"
+
 
 # ==============================================================================
 @yaml.register_class
@@ -80,6 +84,7 @@ class GitAddon(Addon):
 	def __init__(self, dll, owner, repo, dst=''):
 		url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
 		super().__init__(url, dll, dst)
+
 
 # ==============================================================================
 def load():
