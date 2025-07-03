@@ -1,3 +1,6 @@
+# Hypothesis
+.hypothesis
+
 # PyInstaller
 packaging/
 dist/

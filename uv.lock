@@ -12,6 +12,15 @@ wheels = [
 ]
 
 [[package]]
+name = "attrs"
+version = "25.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/5a/b0/1367933a8532ee6ff8d63537de4f1177af4bff9f3e829baf7331f595bb24/attrs-25.3.0.tar.gz", hash = "sha256:75d7cefc7fb576747b2c81b4442d4d4a1ce0900973527c011d1030fd3bf4af1b", size = 812032, upload-time = "2025-03-13T11:10:22.779Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/77/06/bb80f5f86020c4551da315d78b3ab75e8228f89f0162f2c3a819e407941a/attrs-25.3.0-py3-none-any.whl", hash = "sha256:427318ce031701fea540783410126f03899a97ffc6f61596ad581ac2e40e3bc3", size = 63815, upload-time = "2025-03-13T11:10:21.14Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2025.6.15"
 source = { registry = "https://pypi.org/simple" }
@@ -119,15 +128,22 @@ build-exe = [
     { name = "pyinstaller" },
 ]
 dev = [
+    { name = "hypothesis" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pyinstaller" },
     { name = "pytest" },
+    { name = "pytest-mock" },
     { name = "types-requests" },
 ]
 static-type-checking = [
     { name = "mypy" },
     { name = "types-requests" },
+]
+unit-testing = [
+    { name = "hypothesis" },
+    { name = "pytest" },
+    { name = "pytest-mock" },
 ]
 
 [package.metadata]
@@ -140,15 +156,35 @@ requires-dist = [
 [package.metadata.requires-dev]
 build-exe = [{ name = "pyinstaller", specifier = ">=6.14.1,<7.0.0" }]
 dev = [
+    { name = "hypothesis", specifier = ">=6.135.20" },
     { name = "mypy", specifier = ">=1.16.1,<2.0.0" },
     { name = "pre-commit", specifier = ">=4.2.0,<5.0.0" },
     { name = "pyinstaller", specifier = ">=6.14.1,<7.0.0" },
     { name = "pytest", specifier = ">=8.4.1" },
+    { name = "pytest-mock", specifier = ">=3.14.1" },
     { name = "types-requests", specifier = ">=2.32.4.20250611,<3.0.0.0" },
 ]
 static-type-checking = [
     { name = "mypy", specifier = ">=1.16.1,<2.0.0" },
     { name = "types-requests", specifier = ">=2.32.4.20250611,<3.0.0.0" },
+]
+unit-testing = [
+    { name = "hypothesis", specifier = ">=6.135.20" },
+    { name = "pytest", specifier = ">=8.4.1" },
+    { name = "pytest-mock", specifier = ">=3.14.1" },
+]
+
+[[package]]
+name = "hypothesis"
+version = "6.135.20"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "attrs" },
+    { name = "sortedcontainers" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/37/8d/4cbc0c3185c994d010c4b051dda221900412e9fa50424f49aaecbb61df72/hypothesis-6.135.20.tar.gz", hash = "sha256:cef91cf893337b90a4df427ff77674f38bb5bc6c5e1e3d3db1764faee77df7a5", size = 452856, upload-time = "2025-06-30T19:51:10.117Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/88/78/d920c93db6cff52afaf3bc2a4a32863861ddcbae614a264a6776c190a4ec/hypothesis-6.135.20-py3-none-any.whl", hash = "sha256:77c21f888c458ddcab23708c240c5d1fa9e20f4b52f7c136c9d0e9a79c5c1337", size = 519582, upload-time = "2025-06-30T19:51:06.283Z" },
 ]
 
 [[package]]
@@ -427,6 +463,18 @@ wheels = [
 ]
 
 [[package]]
+name = "pytest-mock"
+version = "3.14.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pytest" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/71/28/67172c96ba684058a4d24ffe144d64783d2a270d0af0d9e792737bddc75c/pytest_mock-3.14.1.tar.gz", hash = "sha256:159e9edac4c451ce77a5cdb9fc5d1100708d2dd4ba3c3df572f14097351af80e", size = 33241, upload-time = "2025-05-26T13:58:45.167Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b2/05/77b60e520511c53d1c1ca75f1930c7dd8e971d0c4379b7f4b3f9644685ba/pytest_mock-3.14.1-py3-none-any.whl", hash = "sha256:178aefcd11307d874b4cd3100344e7e2d888d9791a6a1d9bfe90fbc1b74fd1d0", size = 9923, upload-time = "2025-05-26T13:58:43.487Z" },
+]
+
+[[package]]
 name = "pywin32-ctypes"
 version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
@@ -539,6 +587,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c", size = 1319958, upload-time = "2025-05-27T00:56:51.443Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922", size = 1201486, upload-time = "2025-05-27T00:56:49.664Z" },
+]
+
+[[package]]
+name = "sortedcontainers"
+version = "2.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e8/c4/ba2f8066cceb6f23394729afe52f3bf7adec04bf9ed2c820b39e19299111/sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88", size = 30594, upload-time = "2021-05-16T22:03:42.897Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0", size = 29575, upload-time = "2021-05-16T22:03:41.177Z" },
 ]
 
 [[package]]

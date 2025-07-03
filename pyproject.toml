@@ -32,11 +32,16 @@ static-type-checking = [
     "mypy >=1.16.1, <2.0.0",
     "types-requests >=2.32.4.20250611, <3.0.0.0",
 ]
+unit-testing = [
+	"hypothesis>=6.135.20",
+	"pytest>=8.4.1",
+	"pytest-mock>=3.14.1",
+]
 dev = [
     "pre-commit >=4.2.0, <5.0.0",
-    "pytest>=8.4.1",
     {include-group = "build-exe"},
     {include-group = "static-type-checking"},
+    {include-group = "unit-testing"},
 ]
 
 [tool.pytest.ini_options]
