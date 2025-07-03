@@ -33,7 +33,7 @@ _CONFIGS_DIR = _BASEDIR / "configs"
 
 ADDONS_CONFIG = _CONFIGS_DIR / "addons.yaml"
 SETTINGS_CONFIG = _CONFIGS_DIR / "settings.yaml"
-LOGGING_CONFIG = _CONFIGS_DIR / "logging.yaml"
+LOGGING_CONFIG = _CONFIGS_DIR / "logging_config.yaml"
 
 # ==============================================================================
 # Logs
@@ -56,7 +56,7 @@ def initialize():
 		logging.warning("Unnecessary extra call to config.initialize")
 		return
 
-	from parsers.logging import load
+	from parsers.logging_config import load
 
 	logging.config.dictConfig(load())
 
