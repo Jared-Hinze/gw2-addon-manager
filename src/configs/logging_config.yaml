@@ -2,7 +2,7 @@ version: 1
 disable_existing_loggers: no
 root:
   level: INFO
-  handlers: [file]
+  handlers: [file, console]
 loggers:
   api:
     level: NOTSET
@@ -14,6 +14,10 @@ loggers:
     level: NOTSET
     propagate: no
 handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: standard
+    stream: ext://sys.stdout
   file:
     class: logging.handlers.RotatingFileHandler
     level: NOTSET
