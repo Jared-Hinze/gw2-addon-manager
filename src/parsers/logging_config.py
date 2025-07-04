@@ -10,10 +10,14 @@
 
 # Local Libraries
 from config import LOGGING_CONFIG, LOGS_DIR, yaml
+from parsers import is_missing_file
 
 
 # ==============================================================================
 def load() -> dict:
+	if is_missing_file(LOGGING_CONFIG):
+		return {}
+
 	with LOGGING_CONFIG.open() as f:
 		data = yaml.load(f)
 

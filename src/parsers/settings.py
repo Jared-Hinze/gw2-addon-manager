@@ -7,8 +7,8 @@ from pathlib import Path
 # N/A
 
 # Local Libraries
-from config import SETTINGS_CONFIG, relpath
-from parsers import load_yaml
+import config
+from parsers import is_missing_file, load_yaml
 
 # ==============================================================================
 # Initializers
@@ -34,7 +34,7 @@ class Settings(dict):
 # Helpers
 # ==============================================================================
 def fqn(key):
-	return f"[{SETTINGS_CONFIG}@{key}]"
+	return f"[{config.SETTINGS_CONFIG}@{key}]"
 
 
 # ------------------------------------------------------------------------------
@@ -68,26 +68,30 @@ def ensure_path(settings, key):
 
 	value = settings[key]
 	try:
-		value = settings[key] = Path(str(value))
+		value = Path(value)
 	except Exception:
+		settings[key] = None
 		logger.error(f'Failed to convert "{value}" to Path.')
 		logger.error(f"See {fqn(key)}.")
 		return
 
 	if not value.exists():
-		logger.error(f'Invalid Path "{value}".')
+		settings[key] = None
+		logger.error(f'Path does not exist: "{value}".')
 		logger.error(f"See {fqn(key)}.")
+		return
+
+	settings[key] = value
 
 
 # ==============================================================================
 # Loader
 # ==============================================================================
-def load():
-	if not SETTINGS_CONFIG.exists():
-		logger.critical(f"Missing File: {relpath(SETTINGS_CONFIG)}")
+def load() -> Settings:
+	if is_missing_file(config.SETTINGS_CONFIG):
 		return Settings()
 
-	settings = Settings(load_yaml(SETTINGS_CONFIG))
+	settings = Settings(load_yaml(config.SETTINGS_CONFIG))
 	ensure_path(settings, "install_path")
 	ensure_bool(settings, "close_on_success")
 
