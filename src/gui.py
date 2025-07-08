@@ -5,17 +5,20 @@
 import logging
 import os
 import tkinter as tk
+import webbrowser
 from concurrent import futures
 from time import sleep
-from tkinter import ttk
+from tkinter import font, ttk
 from typing import TYPE_CHECKING, NamedTuple
 
 # Third Party Libraries
 from ttkwidgets import CheckboxTreeview
 
 # Local Libraries
+import api
 from paths import APP_ICON, LOGS_DIR
 from config import Settings
+from vcs import has_update
 
 # Type Checking
 if TYPE_CHECKING:
@@ -56,7 +59,6 @@ class Table(CheckboxTreeview):
 		self.tag_configure("odd_row", background="#FFFFFF")
 		self.tag_configure("even_row", background="#CCCCCC")
 		self.set_style()
-		self.pack(fill=tk.BOTH)
 
 	# ----------------------------------------------------------------------
 	# Hook CheckboxTreeview._box_click event to set header image
@@ -198,10 +200,22 @@ class Button(tk.Button):
 
 
 # ==============================================================================
+class HyperLink(tk.Label):
+	def __init__(self, parent, text, command, **kwargs):
+		if "font" not in kwargs:
+			default_font = font.nametofont("TkDefaultFont")
+			kwargs["font"] = font.Font(font=default_font, underline=True)
+
+		super().__init__(parent, text=text, fg="blue", cursor="hand2", **kwargs)
+		self.bind("<Button-1>", lambda event: command())
+
+
+# ==============================================================================
 def create_ui(addons):
 	app.title("GW2 Addon Manager")
 	app.wm_iconbitmap(APP_ICON)
 	app.minsize(275, 100)
+	app.resizable(False, False)
 	app.bind("<Escape>", lambda event: close())
 
 	if addons:
@@ -225,6 +239,34 @@ def _make_log_btn(exit=False):
 
 
 # ==============================================================================
+def _link_to_github():
+	from textwrap import dedent
+
+	title = "Notice"
+	message = '\n'.join(
+		(
+			"Note:",
+			dedent("""
+			Replacing your configs folder will erase your current customizations.
+			Just replace your current EXE with the new one on GitHub to keep your
+			customizations unless the release notes indicate otherwise.
+		""")
+			.strip()
+			.replace('\n', ' '),
+			'',
+			"Clicking OK will...",
+			"• Open your browser to the latest release on GitHub.",
+			"• Close the current running instance of this program.",
+		)
+	)
+	if not tk.messagebox.askokcancel(title=title, message=message):
+		return
+
+	webbrowser.open_new(api.app_latest_release_url())
+	close()
+
+
+# ==============================================================================
 def _error_ui():
 	lbl = tk.Label(app, text="Failed to parse addons.yaml")
 	lbl.pack()
@@ -235,18 +277,23 @@ def _error_ui():
 
 # ==============================================================================
 def _app_ui(addons):
+	if has_update():
+		lbl = HyperLink(app, text="Download latest version", command=_link_to_github)
+		lbl.grid(row=0, column=2, sticky=tk.E)
+
 	tbl = Table(app, name="tblAddons", show=("headings", "tree"))
 	tbl.fill_table(addons)
 	tbl.check_all()
+	tbl.grid(row=1, column=0, columnspan=3, sticky=tk.NSEW)
 
 	btn = Button(app, name="btnInstall", text="Install", command=tbl.install)
-	btn.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+	btn.grid(row=2, column=0, sticky=tk.NSEW)
 
 	btn = Button(app, name="btnUninstall", text="Uninstall", command=tbl.uninstall)
-	btn.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+	btn.grid(row=2, column=1, sticky=tk.NSEW)
 
 	btn = _make_log_btn()
-	btn.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+	btn.grid(row=2, column=2, sticky=tk.NSEW)
 
 
 # ==============================================================================

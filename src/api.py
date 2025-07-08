@@ -113,3 +113,23 @@ class GitRequest(ApiRequest):
 		data = response.json()
 		assert "assets" in data, 'Error: Missing key "assets" in response'
 		return data
+
+
+# ==============================================================================
+def git_latest_release_url(owner, repo):
+	return f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+
+
+# ------------------------------------------------------------------------------
+def git_tags_url(owner, repo):
+	return f"https://api.github.com/repos/{owner}/{repo}/tags"
+
+
+# ------------------------------------------------------------------------------
+def app_latest_release_url():
+	return "https://github.com/Jared-Hinze/gw2-addon-manager/releases/latest"
+
+
+# ------------------------------------------------------------------------------
+def app_tags_url():
+	return git_tags_url("Jared-Hinze", "gw2-addon-manager")

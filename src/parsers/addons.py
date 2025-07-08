@@ -82,8 +82,7 @@ class GitAddon(Addon):
 
 	# --------------------------------------------------------------------------
 	def __init__(self, dll, owner, repo, dst=''):
-		url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
-		super().__init__(url, dll, dst)
+		super().__init__(api.git_latest_release_url(owner, repo), dll, dst)
 
 
 # ==============================================================================
