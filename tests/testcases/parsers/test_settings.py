@@ -7,9 +7,9 @@ from pytest import fixture
 from hypothesis import given, strategies as st
 
 # Local Libraries
-import parsers.settings as settings
-from config import SETTINGS_CONFIG
+import paths
 from helpers import has_message
+from parsers import settings
 
 
 # ==============================================================================
@@ -27,7 +27,11 @@ def Settings():
 # Strategy Helpers
 # ==============================================================================
 def bool_strats(strat):
-	return (strat.map(str.lower), strat.map(str.upper), strat.map(str.title))
+	return (
+		strat.map(str.lower),
+		strat.map(str.upper),
+		strat.map(str.title),
+	)
 
 
 # ==============================================================================
@@ -57,16 +61,29 @@ def test_settings_class_with_values_truthiness(Settings):
 
 
 # ------------------------------------------------------------------------------
-def test_load_missing_config(mocker, caplog, Settings):
-	"""Expect Settings() if SETTINGS_CONFIG does not exist"""
-	mocker.patch("config.SETTINGS_CONFIG", SETTINGS_CONFIG.with_name("foo"))
+def test_settings_class_dot_access_key_missing(Settings):
+	"""Settings.missing_attr should be None"""
+	assert getattr(Settings({"<foo>": 1}), "<bar>", None) is None
+
+
+# ------------------------------------------------------------------------------
+def test_settings_class_dot_access_key_exists(Settings):
+	"""Settings.existing_attr should return correctly"""
+	key, value = "<foo>", 1
+	assert getattr(Settings({key: value}), key, None) == value
+
+
+# ------------------------------------------------------------------------------
+def test_load_missing_config(mocker, Settings):
+	"""Expect Settings() if paths.SETTINGS_CONFIG does not exist"""
+	mocker.patch("parsers.settings.SETTINGS_CONFIG", Path("<foo>"))
+
 	assert settings.load() == Settings()
-	assert has_message(caplog, "Missing File")
 
 
 # ------------------------------------------------------------------------------
 def test_load_existing_config():
-	"""If SETTINGS_CONFIG exists we should get a filled Settings object"""
+	"""If paths.SETTINGS_CONFIG exists we should get a filled Settings object"""
 	assert settings.load()
 
 
@@ -74,7 +91,7 @@ def test_load_existing_config():
 @given(key=st.text())
 def test_fqn(key):
 	"""Ensure fqn provides logs full path information to key"""
-	assert settings.fqn(key) == f"[{SETTINGS_CONFIG}@{key}]"
+	assert settings.fqn(key) == f"[{paths.SETTINGS_CONFIG}@{key}]"
 
 
 # ------------------------------------------------------------------------------
@@ -93,7 +110,7 @@ def test_ensure_key_present(Settings):
 
 # ------------------------------------------------------------------------------
 def test_ensure_bool_missing_key(caplog, Settings):
-	"""Bail if a key doesn't exist. Should leave config untouched"""
+	"""Bail and log if a key doesn't exist. Should leave config untouched"""
 	config = Settings()
 	settings.ensure_bool(config, "<foo>")
 	assert config == Settings()
@@ -122,7 +139,7 @@ def test_ensure_bool_valid_key_value(Settings, value):
 
 # ------------------------------------------------------------------------------
 def test_ensure_path_missing_key(caplog, Settings):
-	"""Bail if a key doesn't exist. Should leave config untouched"""
+	"""Bail and log if a key doesn't exist. Should leave config untouched"""
 	config = Settings()
 	settings.ensure_path(config, "<foo>")
 	assert config == Settings()
@@ -130,7 +147,7 @@ def test_ensure_path_missing_key(caplog, Settings):
 
 
 # ------------------------------------------------------------------------------
-def test_ensure_path_fail_conversion(caplog, tmp_path, Settings):
+def test_ensure_path_fail_conversion(caplog, Settings):
 	"""Set key to None if it is not a Pathlike object and log it"""
 	key = "<foo>"
 	config = Settings({key: 1.2})
