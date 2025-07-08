@@ -9,13 +9,13 @@
 # N/A
 
 # Local Libraries
-from config import LOGGING_CONFIG, LOGS_DIR, yaml
-from parsers import is_missing_file
+from parsers import yaml
+from paths import LOGGING_CONFIG, LOGS_DIR
 
 
 # ==============================================================================
 def load() -> dict:
-	if is_missing_file(LOGGING_CONFIG):
+	if not LOGGING_CONFIG.exists():
 		return {}
 
 	with LOGGING_CONFIG.open() as f:
@@ -31,7 +31,8 @@ def load() -> dict:
 				config["filename"] = target
 		except Exception as e:
 			# Not logged
-			print(f"Failed to reconfigure {handler} with {config=}")
-			print(e)
+			print(f"Failed to reconfigure {handler} with {config=}", flush=True)
+			print(e, flush=True)
+			return {}
 
 	return data

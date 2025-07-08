@@ -84,10 +84,8 @@ class GitRequest(ApiRequest):
 				asset_type = AssetType.ZIP
 			if asset_type:
 				break
-		else:
-			asset = None
 
-		if not asset:
+		if not (asset and asset_type):
 			raise ApiException("Could not determine Git API asset.")
 
 		latest_url = asset["browser_download_url"]
@@ -111,7 +109,7 @@ class GitRequest(ApiRequest):
 
 	# --------------------------------------------------------------------------
 	def check(self, response) -> dict:
-		assert response.status_code == 200
+		assert response.status_code == 200, f"Error: {response.status_code=}"
 		data = response.json()
-		assert "assets" in data
+		assert "assets" in data, 'Error: Missing key "assets" in response'
 		return data

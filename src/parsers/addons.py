@@ -13,8 +13,8 @@ import logging
 
 # Local Libraries
 import api
-from config import ADDONS_CONFIG, yaml
-from parsers import Settings, load_yaml
+from parsers import load_yaml, yaml
+from paths import ADDONS_CONFIG
 
 # ==============================================================================
 # Initializers
@@ -34,13 +34,13 @@ class CoreAddon:
 
 # ==============================================================================
 class Addon(CoreAddon):
-	install_path = Settings.get("install_path")
+	Settings = None
 
 	# --------------------------------------------------------------------------
 	def __init__(self, url, dll, dst=''):
 		self.url = url
 		self.dll = dll
-		self.dst = Addon.install_path / dst / dll
+		self.dst = self.Settings.install_path / dst / dll
 		self.removed = False
 
 	# --------------------------------------------------------------------------
@@ -87,11 +87,28 @@ class GitAddon(Addon):
 
 
 # ==============================================================================
-def load():
+def load(Settings) -> list[Addon]:
+	if getattr(load, "cache", None):
+		return load.cache
+
 	addons = []
 
-	install_path = Addon.install_path
-	if install_path and install_path.exists():
-		addons = load_yaml(ADDONS_CONFIG)
+	if not ADDONS_CONFIG.exists():
+		return addons
 
-	return sorted(addons, key=lambda addon: (addon.dst.parent, addon.dll))
+	if not Settings:
+		return addons
+
+	install_path = Settings.install_path
+	if not (install_path and install_path.exists()):
+		return addons
+
+	try:
+		Addon.Settings = Settings
+		addons = load_yaml(ADDONS_CONFIG)
+	except Exception:
+		return addons
+
+	load.cache = sorted(addons, key=lambda addon: (addon.dst.parent, addon.dll))
+
+	return load.cache

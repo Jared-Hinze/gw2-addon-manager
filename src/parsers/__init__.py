@@ -3,10 +3,10 @@ import logging
 from typing import TYPE_CHECKING
 
 # Third Party Libraries
-# N/A
+from ruamel.yaml import YAML
 
 # Local Libraries
-from config import relpath, yaml
+# N/A
 
 # Type Checking
 if TYPE_CHECKING:
@@ -16,19 +16,12 @@ if TYPE_CHECKING:
 # Initializers
 # ==============================================================================
 logger = logging.getLogger(__name__)
+yaml = YAML(typ="safe")
 
 
 # ==============================================================================
 # Shared Helpers
 # ==============================================================================
-def is_missing_file(file: "Path"):
-	if not file.exists():
-		logger.critical(f"Missing File: {relpath(file)}")
-		return True
-	return False
-
-
-# ------------------------------------------------------------------------------
 def load_yaml(file: "Path") -> dict | None:
 	data = None
 
@@ -40,17 +33,6 @@ def load_yaml(file: "Path") -> dict | None:
 				logger.debug(data)
 	except Exception as e:
 		logger.exception(e)
+		raise
 
 	return data
-
-
-# ==============================================================================
-# Pre-loaders
-# ==============================================================================
-from . import settings
-
-Settings = settings.load()
-
-from . import addons
-
-addons = addons.load()

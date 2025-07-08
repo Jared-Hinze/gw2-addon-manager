@@ -7,8 +7,8 @@ from pathlib import Path
 # N/A
 
 # Local Libraries
-import config
-from parsers import is_missing_file, load_yaml
+from parsers import load_yaml
+from paths import SETTINGS_CONFIG
 
 # ==============================================================================
 # Initializers
@@ -25,6 +25,13 @@ class Settings(dict):
 		super().__init__(*args, **kwargs)
 
 	# --------------------------------------------------------------------------
+	def __getattr__(self, key):
+		if key in self.__dict__:
+			return self.__dict__[key]
+		else:
+			return self.get(key)
+
+	# --------------------------------------------------------------------------
 	def __repr__(self):
 		attrs = ", ".join(f"{k}={v!r}" for k, v in self.items())
 		return f"{type(self).__name__}({attrs})"
@@ -34,7 +41,7 @@ class Settings(dict):
 # Helpers
 # ==============================================================================
 def fqn(key):
-	return f"[{config.SETTINGS_CONFIG}@{key}]"
+	return f"[{SETTINGS_CONFIG}@{key}]"
 
 
 # ------------------------------------------------------------------------------
@@ -88,10 +95,10 @@ def ensure_path(settings, key):
 # Loader
 # ==============================================================================
 def load() -> Settings:
-	if is_missing_file(config.SETTINGS_CONFIG):
+	if not SETTINGS_CONFIG.exists():
 		return Settings()
 
-	settings = Settings(load_yaml(config.SETTINGS_CONFIG))
+	settings = Settings(load_yaml(SETTINGS_CONFIG))
 	ensure_path(settings, "install_path")
 	ensure_bool(settings, "close_on_success")
 

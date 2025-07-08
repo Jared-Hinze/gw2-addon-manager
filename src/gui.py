@@ -14,8 +14,8 @@ from typing import TYPE_CHECKING, NamedTuple
 from ttkwidgets import CheckboxTreeview
 
 # Local Libraries
-from config import APP_ICON, LOGS_DIR
-from parsers import Settings
+from paths import APP_ICON, LOGS_DIR
+from config import Settings
 
 # Type Checking
 if TYPE_CHECKING:
