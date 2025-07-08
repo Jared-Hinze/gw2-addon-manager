@@ -4,6 +4,7 @@
 # PyInstaller
 packaging/
 dist/
+versionfile.txt
 
 # Python
 __pycache__/
