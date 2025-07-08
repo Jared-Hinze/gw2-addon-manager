@@ -1,12 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Python 3.13
-# ==============================================================================
+
 # Built-in Libraries
 import shutil
+import tomllib
 from pathlib import Path
 
 # Third Party Libraries
-# N/A
+import pyinstaller_versionfile
 
 # Local Libraries
 # N/A
@@ -16,6 +16,29 @@ from pathlib import Path
 # ==============================================================================
 ROOT = Path(SPECPATH)
 APP_NAME = ROOT.stem
+
+# ==============================================================================
+# Version File
+# ==============================================================================
+VERSIONFILE = ROOT / "versionfile.txt"
+
+with (ROOT / "pyproject.toml").open("rb") as f:
+	toml = tomllib.load(f)
+
+project = toml["project"]
+
+pyinstaller_versionfile.create_versionfile(
+	output_file=VERSIONFILE.name,
+	version=project["version"],
+	company_name="Jared Hinze",
+	file_description=project["description"],
+	internal_name=project["name"],
+	legal_copyright=project["license"],
+	original_filename=f'{project["name"]}.exe',
+	product_name=project["name"],
+	# https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block
+	translations=[int("0x0409", 16), 1200],
+)
 
 # ==============================================================================
 # Spec
@@ -55,6 +78,7 @@ e = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=["src/assets/app.ico"],
+    version=VERSIONFILE.name,
 )
 
 # ==============================================================================
