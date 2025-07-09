@@ -33,22 +33,6 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
 
-      - name: Import GPG key
-        id: gpg
-        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec
-        with:
-          gpg_private_key: ${{ secrets.GPG_WORKFLOW_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_WORKFLOW_PASSPHRASE }}
-          fingerprint: ${{ secrets.GPG_WORKFLOW_SUBKEY }}
-          trust_level: 4 # Full
-
-      - name: Configure Git for Bot
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "${{ steps.gpg.outputs.email }}"
-          git config user.signingkey ${{ steps.gpg.outputs.keyid }}
-          git config commit.gpgsign true
-
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
         run: |
@@ -63,8 +47,10 @@ jobs:
             echo "Skipping: $version not in tags."
           fi
 
-      - name: Commit and Push changes
-        run: |
           git add .
-          git commit -m "Workflow Bot 🤖: Version Bump"
-          git push
+
+      - name: Commit and Push changes
+        uses: qoomon/actions--create-commit@v1
+        with:
+          message: "Workflow Bot 🤖: Version Bump"
+          skip-empty: true
