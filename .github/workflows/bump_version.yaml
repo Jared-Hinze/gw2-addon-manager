@@ -48,11 +48,10 @@ jobs:
           if [[ -n $(git tag --list $version) ]]; then
             echo "Bumping..."
             uv version --bump minor
+            git add .
           else
             echo "Skipping: $version not in tags."
           fi
-
-          git add .
 
       - name: Sign Commit
         uses: qoomon/actions--create-commit@dfef4d264de752be6d6195a4d61a2f3d3262d406
