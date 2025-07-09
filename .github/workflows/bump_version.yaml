@@ -45,10 +45,9 @@ jobs:
           fi
 
       - name: Commit and Push changes
-        uses: planetscale/ghcommit-action@6a383e778f6620afde4bf4b45069d3c6983c1ae2
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        uses: actions-js/push@5a7cbd780d82c0c937b5977586e641b2fd94acc5
         with:
-          commit_message: "Workflow Bot 🤖: Version Bump"
-          repo: ${{ github.repository }}
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          message: "Workflow Bot 🤖: Version Bump"
+          repository: ${{ github.repository }}
           branch: ${{ github.head_ref || github.ref }}
