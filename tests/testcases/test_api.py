@@ -4,6 +4,7 @@ import requests
 from zipfile import ZipFile
 
 # Third Party Libraries
+from hypothesis import given, strategies as st
 from pytest import fixture, raises
 
 # Local Libraries
@@ -280,3 +281,29 @@ def test_git_request_download_zip(requests_mock, svc_git, redirect_url):
 	svc_git.download()
 	assert svc_git.dst.exists()
 	assert svc_git.dst.read_bytes() == content
+
+
+# ------------------------------------------------------------------------------
+@given(owner=st.text(), repo=st.text())
+def test_git_latest_release_url(owner, repo):
+	url = api.git_latest_release_url(owner, repo)
+	assert url == f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+
+
+# ------------------------------------------------------------------------------
+@given(owner=st.text(), repo=st.text())
+def test_git_tags_url(owner, repo):
+	url = api.git_tags_url(owner, repo)
+	assert url == f"https://api.github.com/repos/{owner}/{repo}/tags"
+
+
+# ------------------------------------------------------------------------------
+def test_app_latest_release_url():
+	url = api.app_latest_release_url()
+	assert url == "https://github.com/Jared-Hinze/gw2-addon-manager/releases/latest"
+
+
+# ------------------------------------------------------------------------------
+def test_app_tags_url():
+	url = api.app_tags_url()
+	assert url == "https://api.github.com/repos/Jared-Hinze/gw2-addon-manager/tags"
