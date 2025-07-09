@@ -278,8 +278,8 @@ def _error_ui():
 # ==============================================================================
 def _app_ui(addons):
 	if has_update():
-		lbl = HyperLink(app, text="Download latest version", command=_link_to_github)
-		lbl.grid(row=0, column=2, sticky=tk.E)
+		lnk = HyperLink(app, text="Download latest version", command=_link_to_github)
+		lnk.grid(row=0, column=2, sticky=tk.E)
 
 	tbl = Table(app, name="tblAddons", show=("headings", "tree"))
 	tbl.fill_table(addons)
