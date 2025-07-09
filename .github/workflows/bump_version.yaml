@@ -35,7 +35,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config core.autocrlf=input
+          git config core.autocrlf input
 
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
