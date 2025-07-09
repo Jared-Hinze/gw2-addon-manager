@@ -46,6 +46,7 @@ jobs:
           version="v$(uv version --short)"
           echo "Current version: $version"
           if [[ -n $(git tag --list $version) ]]; then
+            echo "Bumping..."
             uv version --bump minor
           else
             echo "Skipping: $version not in tags."
@@ -54,10 +55,11 @@ jobs:
           git add .
 
       - name: Sign Commit
-        uses: qoomon/actions--create-commit@v1
+        uses: qoomon/actions--create-commit@dfef4d264de752be6d6195a4d61a2f3d3262d406
         with:
           message: "Workflow Bot 🤖: Version Bump"
           skip-empty: true
 
       - name: Push Commit
+        if: ${{ steps.commit.outputs.commit }}
         run: git push
