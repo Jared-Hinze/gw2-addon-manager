@@ -37,7 +37,7 @@ def get_local_version():
 def get_remote_version():
 	response = requests.get(api.app_tags_url())
 	tags = (Version.parse(tag["name"].lstrip('v')) for tag in response.json())
-	return next(iter(sorted(tags, reverse=True)))
+	return max(tags)
 
 
 # ------------------------------------------------------------------------------
