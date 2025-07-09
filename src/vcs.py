@@ -16,10 +16,10 @@ from paths import BASEDIR
 def get_local_version():
 	# Actually running the EXE
 	if getattr(sys, "frozen", False):
-		info = GetFileVersionInfo(sys.executable, "\\")
+		info = GetFileVersionInfo(sys.executable, '\\')
 
-		ms32_version = info['FileVersionMS']  # most significant 32 bits
-		ls32_version = info['FileVersionLS']  # least significant 32 bits
+		ms32_version = info["FileVersionMS"]  # most significant 32 bits
+		ls32_version = info["FileVersionLS"]  # least significant 32 bits
 
 		return Version(
 			major=HIWORD(ms32_version),
