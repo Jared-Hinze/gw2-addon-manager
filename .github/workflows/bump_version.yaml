@@ -17,7 +17,7 @@ jobs:
   bump_version:
     name: Bump pyproject.toml Version
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout Repository
@@ -31,6 +31,7 @@ jobs:
 
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
+        shell: bash
         run: |
           echo "Existing Tags..."
           git tag --list
