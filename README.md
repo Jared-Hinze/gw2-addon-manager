@@ -33,6 +33,7 @@ This project demonstrates a variety of important industry standards and techniqu
 - Automated Workflows
   - Version Bumping
   - Status Checks
+  	- Pre-Commit
     - Unit Tests
     - Verify PR Builds Complete
   - Tagging
@@ -45,6 +46,7 @@ This project demonstrates a variety of important industry standards and techniqu
 - Cross Platform Design
 - Threading
 - Calling RESTful APIs
+  - Online Version Update Checking
 - Advanced YAML Parsing
 - Logging
 - Enumeration

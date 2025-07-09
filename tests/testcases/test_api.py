@@ -161,8 +161,8 @@ def test_git_request_get_asset_dll(requests_mock, caplog, svc_git, redirect_url)
 				{
 					"name": svc_git.dll,
 					"browser_download_url": redirect_url,
-				}
-			]
+				},
+			],
 		},
 	)
 	# Actual call happens here
@@ -189,8 +189,8 @@ def test_git_request_get_asset_zip(requests_mock, caplog, svc_git, redirect_url)
 				{
 					"name": "foo-windows-gnu.zip",
 					"browser_download_url": redirect_url,
-				}
-			]
+				},
+			],
 		},
 	)
 	# Actual call happens here
@@ -217,8 +217,8 @@ def test_git_request_download_bad_status_code(requests_mock, svc_git, redirect_u
 				{
 					"name": svc_git.dll,
 					"browser_download_url": redirect_url,
-				}
-			]
+				},
+			],
 		},
 	)
 	# Actual call happens here
@@ -242,8 +242,8 @@ def test_git_request_download_dll(requests_mock, svc_git, redirect_url):
 				{
 					"name": svc_git.dll,
 					"browser_download_url": redirect_url,
-				}
-			]
+				},
+			],
 		},
 	)
 	# Actual call happens here
@@ -271,8 +271,8 @@ def test_git_request_download_zip(requests_mock, svc_git, redirect_url):
 				{
 					"name": "foo-windows-gnu.zip",
 					"browser_download_url": redirect_url,
-				}
-			]
+				},
+			],
 		},
 	)
 	# Actual call happens here
