@@ -71,7 +71,7 @@ jobs:
           COMMIT_MESSAGE="Workflow Bot 🤖: Version Bump"
 
           fields=(
-            "-F 'query=@.github/api/createCommitOnBranch.gql'"
+            "-F query=@.github/api/createCommitOnBranch.gql"
             "-F githubRepository=$GITHUB_REPOSITORY"
             "-F branchName=$BRANCH"
             "-F expectedHeadOid=$(git rev-parse HEAD)"
