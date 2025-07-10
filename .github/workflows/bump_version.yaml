@@ -23,11 +23,14 @@ jobs:
       run:
         shell: bash
 
+    env:
+      BRANCH: ${{ github.head_ref || github.ref }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.head_ref || github.ref }}
+          ref: ${{ env.BRANCH }}
           fetch-depth: 0
 
       - name: Install uv
@@ -41,20 +44,42 @@ jobs:
 
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
+        id: bump
         run: |
           echo "Existing Tags..."
           git tag --list
 
           version="v$(uv version --short)"
           echo "Current version: $version"
-          if [[ -n $(git tag --list $version) ]]; then
-            echo "Bumping..."
-            uv version --bump minor
 
-            git status
+          bumped=false
+          if [[ -n $(git tag --list $version) ]]; then
+            uv version --bump minor
             git add --verbose .
-            git commit -m "Workflow Bot 🤖: Version Bump"
-            git push
+            bumped=true
           else
             echo "Skipping: $version not in tags."
           fi
+
+          echo "bumped=$bumped" >> $GITHUB_OUTPUT
+
+      - name: Signed Commit (GraphQL API)
+        if: steps.bump.outputs.bumped
+        run: |
+          COMMIT_MESSAGE="Workflow Bot 🤖: Version Bump"
+
+          fields=(
+            "-F 'query=@.github/api/createCommitOnBranch.gql'"
+            "-F githubRepository=$GITHUB_REPOSITORY"
+            "-F branchName=$BRANCH"
+            "-F expectedHeadOid=$(git rev-parse HEAD)"
+            "-F commitMessage='$COMMIT_MESSAGE'"
+          )
+          for filename in $(git diff --staged --name-only); do
+            fields+=(
+              "-F files[][path]=$filename"
+              "-F files[][contents]=$(base64 -w0 $filename)"
+            )
+          done
+
+          gh api graphql "${fields[@]}"
