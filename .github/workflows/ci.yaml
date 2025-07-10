@@ -39,6 +39,7 @@ jobs:
         run: uv run pre-commit run
 
       - name: Run PyTests
+        shell: bash
         run: |
           uv run pytest \
             --verbose \
