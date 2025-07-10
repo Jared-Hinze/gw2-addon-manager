@@ -21,6 +21,7 @@ This project demonstrates a variety of important industry standards and techniqu
 **Note:** some of the approaches taken were solely for the purpose of demonstrating knowledge/skills.
 ## VCS:
 - Git/GitHub
+- Signed Commits (GPG)
 - Pre-commit
 - Semantic Versioning
 - Dependency Groups
@@ -28,9 +29,11 @@ This project demonstrates a variety of important industry standards and techniqu
 - Submodules
 - Wikis
 - Licensing
-- Code Signing
+- EXE Signing
 ## CI/CD:
 - Automated Workflows
+  - Artifacts
+  - Parallel Jobs
   - Version Bumping
   - Status Checks
   	- Pre-Commit
