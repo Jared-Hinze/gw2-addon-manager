@@ -70,11 +70,6 @@ jobs:
         run: |
           COMMIT_MESSAGE="Workflow Bot 🤖: Version Bump"
 
-          ls -hAlt
-          ls .github -hALt
-          ls .github/api -hAlt
-          cat .github/api/createCommitOnBranch.gql
-
           fields=(
             "-F 'query=@.github/api/createCommitOnBranch.gql'"
             "-F githubRepository=$GITHUB_REPOSITORY"
@@ -91,4 +86,5 @@ jobs:
             )
           done
 
+          echo gh api graphql "${fields[@]}"
           gh api graphql "${fields[@]}"
