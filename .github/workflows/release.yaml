@@ -17,6 +17,7 @@ on:
   pull_request:
     types: [ closed ]
     paths: [ src/** ]
+    branches: [ main ]
 
 permissions:
   contents: write
