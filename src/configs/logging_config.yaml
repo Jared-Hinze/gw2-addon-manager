@@ -10,7 +10,13 @@ loggers:
   gui:
     level: NOTSET
     propagate: no
-  parser:
+  PIL.PngImagePlugin:
+    level: INFO
+    propagate: no
+  parsers:
+    level: NOTSET
+    propagate: no
+  vcs:
     level: NOTSET
     propagate: no
 handlers:
