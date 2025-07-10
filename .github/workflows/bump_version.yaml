@@ -70,8 +70,13 @@ jobs:
         run: |
           COMMIT_MESSAGE="Workflow Bot 🤖: Version Bump"
 
+          ls -hAlt
+          ls .github -hALt
+          ls .github/api -hAlt
+          cat .github/api/createCommitOnBranch.gql
+
           fields=(
-            "-F query='@.github/api/createCommitOnBranch.gql'"
+            "-F 'query=@.github/api/createCommitOnBranch.gql'"
             "-F githubRepository=$GITHUB_REPOSITORY"
             "-F branchName=$BRANCH"
             "-F expectedHeadOid=$(git rev-parse HEAD)"
