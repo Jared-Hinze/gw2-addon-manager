@@ -30,6 +30,7 @@ if TYPE_CHECKING:
 # Initializers
 # ==============================================================================
 logger = logging.getLogger(__name__)
+logging.debug(f"initializing logger: {__name__}")
 app = tk.Tk()
 
 
