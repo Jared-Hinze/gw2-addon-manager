@@ -15,7 +15,6 @@ import pyinstaller_versionfile
 # Globals
 # ==============================================================================
 ROOT = Path(SPECPATH)
-APP_NAME = ROOT.stem
 
 # ==============================================================================
 # Version File
@@ -39,6 +38,13 @@ pyinstaller_versionfile.create_versionfile(
 	# https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block
 	translations=[int("0x0409", 16), 1200],
 )
+
+if VERSIONFILE.exists():
+	print(f"Created: {VERSIONFILE}")
+else:
+	import sys
+	print(f"Failed to create {VERSIONFILE}")
+	sys.exit(1)
 
 # ==============================================================================
 # Spec
@@ -64,7 +70,7 @@ e = EXE(
     a.binaries,
     a.datas,
     [],
-    name=APP_NAME,
+    name=project["name"],
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
