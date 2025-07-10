@@ -23,10 +23,10 @@ permissions:
   id-token: write
 
 jobs:
-  validate:
-    name: Check Commit
+  pre-commit:
+    name: Run pre-commit
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -45,6 +45,18 @@ jobs:
           TO: ${{ github.event.pull_request.head.sha || 'HEAD' }}
         run: uv run pre-commit run --from-ref $FROM --to-ref $TO
 
+  pytest:
+    name: Run pytest
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+
       - name: Run PyTests
         shell: bash
         run: |
@@ -56,7 +68,7 @@ jobs:
 
   build:
     name: Build EXE with PyInstaller
-    needs: [ validate ]
+    needs: [ pre-commit, pytest ]
 
     runs-on: windows-latest
 
