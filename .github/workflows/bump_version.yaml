@@ -48,7 +48,9 @@ jobs:
           if [[ -n $(git tag --list $version) ]]; then
             echo "Bumping..."
             uv version --bump minor
+            git status
             git add .
+            git status
           else
             echo "Skipping: $version not in tags."
           fi
