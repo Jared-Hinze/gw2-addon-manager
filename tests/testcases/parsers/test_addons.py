@@ -1,11 +1,17 @@
 # Built-in Libraries
+from os import environ
 from pathlib import Path
 
 # Third Party Libraries
-from pytest import fixture
+from pytest import fixture, mark
 
 # Local Libraries
 from parsers import settings, addons
+
+# ==============================================================================
+# Globals
+# ==============================================================================
+CI = "GITHUB_ACTIONS" in environ
 
 
 # ==============================================================================
@@ -63,6 +69,7 @@ def test_load_bad_config(mocker, tmp_path):
 
 
 # ------------------------------------------------------------------------------
+@mark.skipif(CI, reason="A valid Settings.install_path will never exist")
 def test_load_good_config():
 	"""If a good config is loaded expect a proper data structure"""
 	assert addons.load(settings.load())
