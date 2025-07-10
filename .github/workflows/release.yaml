@@ -95,8 +95,9 @@ jobs:
           tag_name: ${{ needs.create_tag.outputs.tag }}
           generate_release_notes: true
           files: |
-            ${{ env.REPO_NAME }}.zip
             *.sigstore.json
+            ${{ env.REPO_NAME }}.exe
+            ${{ env.REPO_NAME }}.zip
           draft: ${{ inputs.is_draft || false }}
           prerelease: ${{ inputs.is_prerelease || false }}
           make_latest: true

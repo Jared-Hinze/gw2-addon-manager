@@ -1,23 +1,28 @@
-# Python 3.13
-# ==============================================================================
 # Built-in Libraries
 import logging
+from typing import TYPE_CHECKING
 
 # Third Party Libraries
-# N/A
+from ruamel.yaml import YAML
 
 # Local Libraries
-from config import yaml
+# N/A
+
+# Type Checking
+if TYPE_CHECKING:
+	from pathlib import Path
 
 # ==============================================================================
 # Initializers
 # ==============================================================================
 logger = logging.getLogger(__name__)
+yaml = YAML(typ="safe")
+
 
 # ==============================================================================
 # Shared Helpers
 # ==============================================================================
-def load_yaml(file) -> dict | None:
+def load_yaml(file: "Path") -> dict | None:
 	data = None
 
 	try:
@@ -28,14 +33,6 @@ def load_yaml(file) -> dict | None:
 				logger.debug(data)
 	except Exception as e:
 		logger.exception(e)
+		raise
 
 	return data
-
-# ==============================================================================
-# Pre-loaders
-# ==============================================================================
-from . import settings
-Settings = settings.load()
-
-from . import addons
-addons = addons.load()

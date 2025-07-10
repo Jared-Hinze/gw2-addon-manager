@@ -1,5 +1,3 @@
-# Python 3.13
-# ==============================================================================
 # Built-in Libraries
 import logging
 import re
@@ -9,13 +7,14 @@ from pathlib import Path
 # N/A
 
 # Local Libraries
-from config import SETTINGS_CONFIG, relpath
 from parsers import load_yaml
+from paths import SETTINGS_CONFIG
 
 # ==============================================================================
 # Initializers
 # ==============================================================================
 logger = logging.getLogger(__name__)
+
 
 # ==============================================================================
 # Classes
@@ -26,15 +25,24 @@ class Settings(dict):
 		super().__init__(*args, **kwargs)
 
 	# --------------------------------------------------------------------------
+	def __getattr__(self, key):
+		if key in self.__dict__:
+			return self.__dict__[key]
+		else:
+			return self.get(key)
+
+	# --------------------------------------------------------------------------
 	def __repr__(self):
 		attrs = ", ".join(f"{k}={v!r}" for k, v in self.items())
 		return f"{type(self).__name__}({attrs})"
+
 
 # ==============================================================================
 # Helpers
 # ==============================================================================
 def fqn(key):
 	return f"[{SETTINGS_CONFIG}@{key}]"
+
 
 # ------------------------------------------------------------------------------
 def ensure_key(settings, key):
@@ -43,6 +51,7 @@ def ensure_key(settings, key):
 		logger.critical(f"See: {fqn(key)}")
 		return False
 	return True
+
 
 # ------------------------------------------------------------------------------
 def ensure_bool(settings, key):
@@ -58,6 +67,7 @@ def ensure_bool(settings, key):
 
 	settings[key] = value in ('t', 'y', "true", "yes", "on")
 
+
 # ------------------------------------------------------------------------------
 def ensure_path(settings, key):
 	if not ensure_key(settings, key):
@@ -65,22 +75,27 @@ def ensure_path(settings, key):
 
 	value = settings[key]
 	try:
-		value = settings[key] = Path(str(value))
+		value = Path(value)
 	except Exception:
+		settings[key] = Path("<foo>")
 		logger.error(f'Failed to convert "{value}" to Path.')
 		logger.error(f"See {fqn(key)}.")
 		return
 
 	if not value.exists():
-		logger.error(f'Invalid Path "{value}".')
+		settings[key] = Path("<foo>")
+		logger.error(f'Path does not exist: "{value}".')
 		logger.error(f"See {fqn(key)}.")
+		return
+
+	settings[key] = value
+
 
 # ==============================================================================
 # Loader
 # ==============================================================================
-def load():
+def load() -> Settings:
 	if not SETTINGS_CONFIG.exists():
-		logger.critical(f"Missing File: {relpath(SETTINGS_CONFIG)}")
 		return Settings()
 
 	settings = Settings(load_yaml(SETTINGS_CONFIG))
