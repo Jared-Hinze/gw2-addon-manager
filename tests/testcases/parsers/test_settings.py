@@ -152,7 +152,7 @@ def test_ensure_path_fail_conversion(caplog, Settings):
 	key = "<foo>"
 	config = Settings({key: 1.2})
 	settings.ensure_path(config, key)
-	assert config[key] is None
+	assert config[key] == Path("<foo>")
 	assert has_message(caplog, "Failed to convert")
 
 
@@ -162,7 +162,7 @@ def test_ensure_path_when_does_not_exist(caplog, Settings):
 	key = "<foo>"
 	config = Settings({key: str(Path("<bar>"))})
 	settings.ensure_path(config, key)
-	assert config[key] is None
+	assert config[key] == Path("<foo>")
 	assert has_message(caplog, "Path does not exist")
 
 

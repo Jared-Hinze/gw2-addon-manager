@@ -65,7 +65,7 @@ def test_load_bad_config(mocker, tmp_path):
 # ------------------------------------------------------------------------------
 def test_load_good_config():
 	"""If a good config is loaded expect a proper data structure"""
-	assert addons.load(settings.load()) is not None
+	assert addons.load(settings.load())
 
 
 # ------------------------------------------------------------------------------

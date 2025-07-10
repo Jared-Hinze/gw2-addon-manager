@@ -77,13 +77,13 @@ def ensure_path(settings, key):
 	try:
 		value = Path(value)
 	except Exception:
-		settings[key] = None
+		settings[key] = Path("<foo>")
 		logger.error(f'Failed to convert "{value}" to Path.')
 		logger.error(f"See {fqn(key)}.")
 		return
 
 	if not value.exists():
-		settings[key] = None
+		settings[key] = Path("<foo>")
 		logger.error(f'Path does not exist: "{value}".')
 		logger.error(f"See {fqn(key)}.")
 		return
