@@ -2,7 +2,7 @@ version: 1
 disable_existing_loggers: no
 root:
   level: INFO
-  handlers: [file]
+  handlers: [file, console]
 loggers:
   api:
     level: NOTSET
@@ -10,10 +10,20 @@ loggers:
   gui:
     level: NOTSET
     propagate: no
-  parser:
+  PIL.PngImagePlugin:
+    level: INFO
+    propagate: no
+  parsers:
+    level: NOTSET
+    propagate: no
+  vcs:
     level: NOTSET
     propagate: no
 handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: standard
+    stream: ext://sys.stdout
   file:
     class: logging.handlers.RotatingFileHandler
     level: NOTSET

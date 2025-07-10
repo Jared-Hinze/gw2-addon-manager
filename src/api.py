@@ -1,5 +1,3 @@
-# Python 3.13
-# ==============================================================================
 # Built-in Libraries
 import logging
 from abc import ABC, abstractmethod
@@ -18,14 +16,17 @@ import requests
 # ==============================================================================
 logger = logging.getLogger(__name__)
 
+
 # ==============================================================================
 class ApiException(Exception):
 	pass
+
 
 # ==============================================================================
 class AssetType(IntEnum):
 	DLL = auto()
 	ZIP = auto()
+
 
 # ==============================================================================
 class ApiRequest(ABC):
@@ -60,11 +61,13 @@ class ApiRequest(ABC):
 			zf = ZipFile(BytesIO(response.content))
 			zf.extract(self.dll, self.dst.parent)
 
+
 # ==============================================================================
 class DirectRequest(ApiRequest):
 	# --------------------------------------------------------------------------
 	def get_asset(self) -> tuple[requests.Response, AssetType]:
 		return requests.get(self.url), AssetType.DLL
+
 
 # ==============================================================================
 class GitRequest(ApiRequest):
@@ -81,10 +84,8 @@ class GitRequest(ApiRequest):
 				asset_type = AssetType.ZIP
 			if asset_type:
 				break
-		else:
-			asset = None
 
-		if not asset:
+		if not (asset and asset_type):
 			raise ApiException("Could not determine Git API asset.")
 
 		latest_url = asset["browser_download_url"]
@@ -108,7 +109,27 @@ class GitRequest(ApiRequest):
 
 	# --------------------------------------------------------------------------
 	def check(self, response) -> dict:
-		assert response.status_code == 200
+		assert response.status_code == 200, f"Error: {response.status_code=}"
 		data = response.json()
-		assert "assets" in data
+		assert "assets" in data, 'Error: Missing key "assets" in response'
 		return data
+
+
+# ==============================================================================
+def git_latest_release_url(owner, repo):
+	return f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+
+
+# ------------------------------------------------------------------------------
+def git_tags_url(owner, repo):
+	return f"https://api.github.com/repos/{owner}/{repo}/tags"
+
+
+# ------------------------------------------------------------------------------
+def app_latest_release_url():
+	return "https://github.com/Jared-Hinze/gw2-addon-manager/releases/latest"
+
+
+# ------------------------------------------------------------------------------
+def app_tags_url():
+	return git_tags_url("Jared-Hinze", "gw2-addon-manager")

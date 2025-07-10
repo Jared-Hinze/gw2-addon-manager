@@ -1,3 +1,11 @@
+![GitHub License](https://img.shields.io/github/license/Jared-Hinze/gw2-addon-manager)
+![GitHub Release](https://img.shields.io/github/v/release/Jared-Hinze/gw2-addon-manager)
+
+![Dynamic TOML Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2FJared-Hinze%2Fgw2-addon-manager%2Fmain%2Fpyproject.toml&query=project.requires-python&label=Python)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+![Static Badge](https://img.shields.io/badge/pytest-%2523ffffff.svg?logo=pytest&labelColor=505050&color=2F1D38)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 # Description:
 This is a GUI tool that provides a simple interface to install common Guild Wars 2 addons.
 
@@ -13,6 +21,7 @@ This project demonstrates a variety of important industry standards and techniqu
 **Note:** some of the approaches taken were solely for the purpose of demonstrating knowledge/skills.
 ## VCS:
 - Git/GitHub
+- Signed Commits (GPG)
 - Pre-commit
 - Semantic Versioning
 - Dependency Groups
@@ -20,12 +29,15 @@ This project demonstrates a variety of important industry standards and techniqu
 - Submodules
 - Wikis
 - Licensing
-- Code Signing
+- EXE Signing
 ## CI/CD:
 - Automated Workflows
+  - Artifacts
+  - Parallel Jobs
   - Version Bumping
   - Status Checks
-    - Unit Tests (coming soon)
+  	- Pre-Commit
+    - Unit Tests
     - Verify PR Builds Complete
   - Tagging
   - Releasing
@@ -37,6 +49,7 @@ This project demonstrates a variety of important industry standards and techniqu
 - Cross Platform Design
 - Threading
 - Calling RESTful APIs
+  - Online Version Update Checking
 - Advanced YAML Parsing
 - Logging
 - Enumeration

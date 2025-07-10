@@ -17,13 +17,20 @@ jobs:
   bump_version:
     name: Bump pyproject.toml Version
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      BRANCH: ${{ github.head_ref || github.ref }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.head_ref || github.ref }}
+          ref: ${{ env.BRANCH }}
           fetch-depth: 0
 
       - name: Install uv
@@ -31,23 +38,29 @@ jobs:
 
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
+        id: bump
         run: |
           echo "Existing Tags..."
           git tag --list
 
           version="v$(uv version --short)"
           echo "Current version: $version"
+
           if [[ -n $(git tag --list $version) ]]; then
             uv version --bump minor
+            bumped=true
           else
             echo "Skipping: $version not in tags."
+            bumped=false
           fi
 
-      - name: Commit and Push changes
-        uses: planetscale/ghcommit-action@6a383e778f6620afde4bf4b45069d3c6983c1ae2
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          echo "bumped=$bumped" >> $GITHUB_OUTPUT
+
+      - name: Commit and Push
+        if: steps.bump.outputs.bumped
+        uses: iarekylew00t/verified-bot-commit@69a9979a7952792313012eadcbdd6b56f17154f6
         with:
-          commit_message: "Workflow Bot 🤖: Version Bump"
-          repo: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref }}
+          ref: ${{ env.BRANCH }}
+          files: |
+            **
+          message: "Workflow Bot 🤖: Version Bump"

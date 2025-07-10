@@ -1,9 +1,10 @@
-# Environments
-.venv
+# Hypothesis
+.hypothesis
 
 # PyInstaller
 packaging/
 dist/
+versionfile.txt
 
 # Python
 __pycache__/
