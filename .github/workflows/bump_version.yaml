@@ -36,12 +36,6 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
 
-      - name: Configure Git
-        run: |
-          git config core.autocrlf input
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
         id: bump
@@ -52,25 +46,21 @@ jobs:
           version="v$(uv version --short)"
           echo "Current version: $version"
 
-          bumped=false
           if [[ -n $(git tag --list $version) ]]; then
             uv version --bump minor
-            git add --verbose .
             bumped=true
           else
             echo "Skipping: $version not in tags."
+            bumped=false
           fi
 
           echo "bumped=$bumped" >> $GITHUB_OUTPUT
 
-      - name: Commit
+      - name: Commit and Push
         if: steps.bump.outputs.bumped
-        run: |
-          git commit -m "Workflow Bot 🤖: Version Bump"
-
-      - name: Push
-        if: steps.bump.outputs.bumped
-        uses: ad-m/github-push-action@d91a481090679876dfc4178fef17f286781251df
+        uses: iarekylew00t/verified-bot-commit@69a9979a7952792313012eadcbdd6b56f17154f6
         with:
-          repository: ${{ github.repository }}
-          branch: ${{ env.BRANCH }}
+          ref: ${{ env.BRANCH }}
+          files: |
+            **
+          message: "Workflow Bot 🤖: Version Bump"
