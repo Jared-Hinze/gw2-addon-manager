@@ -36,7 +36,12 @@ jobs:
         uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
 
       - name: Run Pre-Commit
-        run: uv run pre-commit run
+        shell: bash
+        run: |
+          FROM="origin/${{ github.event.pull_request.base.ref || main }}"
+          TO="${{ github.event.pull_request.head.sha || HEAD }}"
+
+          uv run pre-commit run --from-ref $FROM --to-ref $TO
 
       - name: Run PyTests
         shell: bash
