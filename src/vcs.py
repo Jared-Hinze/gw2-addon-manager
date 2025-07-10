@@ -16,7 +16,6 @@ from paths import BASEDIR
 # Initializers
 # ==============================================================================
 logger = logging.getLogger(__name__)
-logging.debug(f"initializing logger: {__name__}")
 
 
 # ==============================================================================
