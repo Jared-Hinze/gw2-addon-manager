@@ -66,8 +66,8 @@ jobs:
             --hypothesis-profile=ci \
             --hypothesis-explain
 
-  build:
-    name: Build EXE with PyInstaller
+  build-exe:
+    name: Run PyInstaller
 
     runs-on: windows-latest
 
