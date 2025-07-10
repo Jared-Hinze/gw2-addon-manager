@@ -35,9 +35,8 @@ def test_get_local_version_dev():
 	major=st_semver_ints,
 	minor=st_semver_ints,
 	patch=st_semver_ints,
-	prerelease=st_semver_ints,
 )
-def test_get_local_version_exe(major, minor, patch, prerelease):
+def test_get_local_version_exe(major, minor, patch):
 	"""Ensure sys.executable parses to a proper Version"""
 	with mock.patch.object(vcs.sys, "frozen", create=True, new=True):
 		assert hasattr(vcs.sys, "frozen")
@@ -47,12 +46,12 @@ def test_get_local_version_exe(major, minor, patch, prerelease):
 			#              : ----------------- -----------------  ↖
 			# 32 bit string: 00000000 00000001 00000000 00000010 = 65538
 			"FileVersionMS": (major << 16) + minor,
-			"FileVersionLS": (patch << 16) + prerelease,
+			"FileVersionLS": (patch << 16),
 		}
 		with mock.patch("vcs.GetFileVersionInfo", return_value=version_info):
 			version = vcs.get_local_version()
 			assert isinstance(version, Version)
-			assert version == Version(major, minor, patch, prerelease)
+			assert version == Version(major, minor, patch)
 
 
 # ------------------------------------------------------------------------------

@@ -32,7 +32,6 @@ def get_local_version():
 			major=HIWORD(ms32_version),
 			minor=LOWORD(ms32_version),
 			patch=HIWORD(ls32_version),
-			prerelease=LOWORD(ls32_version),
 		)
 
 	# In Development
