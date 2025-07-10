@@ -63,28 +63,14 @@ jobs:
 
           echo "bumped=$bumped" >> $GITHUB_OUTPUT
 
-      - name: Signed Commit (GraphQL API)
+      - name: Commit
         if: steps.bump.outputs.bumped
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
-          COMMIT_MESSAGE="Workflow Bot 🤖: Version Bump"
+          git commit -m "Workflow Bot 🤖: Version Bump"
 
-          fields=(
-            "-F 'query=@.github/api/createCommitOnBranch.gql'"
-            "-F githubRepository=$GITHUB_REPOSITORY"
-            "-F branchName=$BRANCH"
-            "-F expectedHeadOid=$(git rev-parse HEAD)"
-            "-F commitMessage='$COMMIT_MESSAGE'"
-          )
-          for filename in $(git diff --staged --name-only); do
-            encoded_filename="b64${filename%.*}.txt"
-            base64 -w 0 "$filename" > $encoded_filename
-            fields+=(
-              "-F files[][path]=$filename"
-              "-F files[][contents]=@$encoded_filename"
-            )
-          done
-
-          echo gh api graphql "${fields[@]}"
-          gh api graphql "${fields[@]}"
+      - name: Push
+        if: steps.bump.outputs.bumped
+        uses: ad-m/github-push-action@d91a481090679876dfc4178fef17f286781251df
+        with:
+          repository: ${{ github.repository }}
+          branch: ${{ env.BRANCH }}
