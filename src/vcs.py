@@ -1,4 +1,5 @@
 # Built-in Libraries
+import logging
 import requests
 import sys
 import tomllib
@@ -10,6 +11,11 @@ from win32api import GetFileVersionInfo, HIWORD, LOWORD
 # Local Libraries
 import api
 from paths import BASEDIR
+
+# ==============================================================================
+# Initializers
+# ==============================================================================
+logger = logging.getLogger(__name__)
 
 
 # ==============================================================================
@@ -42,4 +48,7 @@ def get_remote_version():
 
 # ------------------------------------------------------------------------------
 def has_update():
-	return get_remote_version() > get_local_version()
+	remote = get_remote_version()
+	local = get_local_version()
+	logger.debug(f"Version Checking: {remote=} vs {local=}")
+	return remote > local

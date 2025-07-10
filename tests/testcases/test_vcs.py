@@ -1,4 +1,5 @@
 # Built-in Libraries
+import logging
 import tomllib
 from unittest import mock
 
@@ -9,6 +10,7 @@ from semver.version import Version
 # Local Libraries
 import api
 import vcs
+from helpers import has_message
 from paths import BASEDIR
 
 # ==============================================================================
@@ -93,3 +95,14 @@ def test_has_update_same(requests_mock, mocker):
 	mocker.patch("vcs.get_local_version", return_value=Version(1))
 
 	assert vcs.has_update() is False
+
+
+# ------------------------------------------------------------------------------
+def test_has_update_logging(requests_mock, mocker, caplog):
+	"""Making sure this message gets logged in case I need to troubleshoot"""
+	requests_mock.get(api.app_tags_url(), json=[{"name": "v1.0.0"}])
+	mocker.patch("vcs.get_local_version", return_value=Version(1))
+	caplog.set_level(logging.DEBUG)
+
+	vcs.has_update()
+	assert has_message(caplog, "Version Checking")
