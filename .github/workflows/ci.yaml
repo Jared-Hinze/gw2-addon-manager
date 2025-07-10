@@ -69,6 +69,7 @@ jobs:
   build:
     name: Build EXE with PyInstaller
     needs: [ pre-commit, pytest ]
+    if: needs.pre-commit.result == 'success' && needs.pytest.result == 'success'
 
     runs-on: windows-latest
 
