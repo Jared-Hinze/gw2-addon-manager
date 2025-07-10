@@ -37,11 +37,10 @@ jobs:
 
       - name: Run Pre-Commit
         shell: bash
-        run: |
-          FROM="origin/${{ github.event.pull_request.base.ref || main }}"
-          TO="${{ github.event.pull_request.head.sha || HEAD }}"
-
-          uv run pre-commit run --from-ref $FROM --to-ref $TO
+        env:
+          FROM: origin/${{ github.event.pull_request.base.ref || 'main' }}
+          TO: ${{ github.event.pull_request.head.sha || 'HEAD' }}
+        run: uv run pre-commit run --from-ref $FROM --to-ref $TO
 
       - name: Run PyTests
         shell: bash
