@@ -36,6 +36,8 @@ jobs:
       - name: Configure Git
         run: |
           git config core.autocrlf input
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
         # If no tags exist use the existing version - otherwise bump minor
       - name: Bump Version
@@ -48,23 +50,11 @@ jobs:
           if [[ -n $(git tag --list $version) ]]; then
             echo "Bumping..."
             uv version --bump minor
-            echo "--------------------------------------"
+
             git status
-            echo "--------------------------------------"
             git add --verbose .
-            echo "--------------------------------------"
-            git status
+            git commit -m "Workflow Bot 🤖: Version Bump"
+            git push
           else
             echo "Skipping: $version not in tags."
           fi
-
-      - name: Sign Commit
-        uses: qoomon/actions--create-commit@dfef4d264de752be6d6195a4d61a2f3d3262d406
-        id: commit
-        with:
-          message: "Workflow Bot 🤖: Version Bump"
-          skip-empty: true
-
-      - name: Push Commit
-        if: ${{ steps.commit.outputs.commit }}
-        run: git push
