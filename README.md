@@ -46,7 +46,6 @@ This project demonstrates a variety of important industry standards and techniqu
 ## Python:
 - Packaging
 - MVC Design Pattern
-- Cross Platform Design
 - Threading
 - Calling RESTful APIs
   - Online Version Update Checking
