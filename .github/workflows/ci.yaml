@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6
 
       - name: Run Pre-Commit
         shell: bash
@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Install uv
-        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6
 
       - name: Run PyTests
         shell: bash
@@ -76,7 +76,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Install uv
-        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba
+        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6
 
       - name: Run PyInstaller
         run: uv run pyinstaller packaging.spec
