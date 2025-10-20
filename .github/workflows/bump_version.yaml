@@ -58,7 +58,7 @@ jobs:
 
       - name: Commit and Push
         if: steps.bump.outputs.bumped
-        uses: iarekylew00t/verified-bot-commit@69a9979a7952792313012eadcbdd6b56f17154f6
+        uses: iarekylew00t/verified-bot-commit@400b5d3f93688c318e24d70b1c4c42e2a5204fa7
         with:
           ref: ${{ env.BRANCH }}
           files: |
